@@ -1,0 +1,49 @@
+# ManipMasta — VM: broker MQTT + server FastAPI (+ simulatore con: docker compose --profile sim up -d)
+name: manipmasta
+
+services:
+  mosquitto:
+    image: eclipse-mosquitto:2
+    container_name: manipmasta-mosquitto
+    restart: unless-stopped
+    ports:
+      - "${MQTT_BIND:-127.0.0.1}:1883:1883"   # solo sulla VLAN IoT
+    volumes:
+      - ./mosquitto/config:/mosquitto/config
+      - ./mosquitto/data:/mosquitto/data
+      - ./mosquitto/log:/mosquitto/log
+    environment:
+      TZ: ${TZ:-Europe/Rome}
+
+  app:
+    build: .
+    image: manipmasta-server:latest
+    container_name: manipmasta-server
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      MQTT_HOST: mosquitto
+      DB_PATH: /data/manipmasta.db
+    volumes:
+      - ./data:/data
+    ports:
+      - "${HTTP_BIND:-0.0.0.0}:${HTTP_PORT:-8080}:8080"
+    depends_on:
+      - mosquitto
+
+  simulator:
+    build: .
+    image: manipmasta-server:latest
+    container_name: manipmasta-simulator
+    profiles: ["sim"]
+    restart: unless-stopped
+    command: ["python", "simulator.py", "--speed", "${SIM_SPEED:-5}", "-v"]
+    environment:
+      MQTT_HOST: mosquitto
+      MQTT_PORT: "1883"
+      TOPIC_PREFIX: ${TOPIC_PREFIX:-manipmasta}
+      SIM_MQTT_USER: ${MQTT_DEVICE_USER:-manipmasta}
+      SIM_MQTT_PASS: ${MQTT_DEVICE_PASS:-}
+    depends_on:
+      - mosquitto
+      - app

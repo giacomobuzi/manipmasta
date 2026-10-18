@@ -1,0 +1,274 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ManipMasta</title>
+<meta name="description" content="Comando della sfogliatrice ManipMasta">
+<meta name="theme-color" content="#1b2833" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#e4e9ec" media="(prefers-color-scheme: light)">
+<link rel="manifest" href="/manifest.json">
+<link rel="icon" href="/static/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/static/icon-192.png">
+<link rel="stylesheet" href="/static/app.css">
+</head>
+<body>
+
+<!-- ============ accesso ============ -->
+<section id="login" class="login" hidden>
+  <form id="loginForm" class="login-card" autocomplete="off">
+    <svg class="login-mark" viewBox="0 0 64 64" aria-hidden="true"><use href="#i-logo"/></svg>
+    <h1>ManipMasta</h1>
+    <p>Inserisci il token di accesso configurato sul server (API_TOKEN).</p>
+    <label for="tokenInput">Token</label>
+    <input id="tokenInput" type="password" required autocomplete="current-password" spellcheck="false">
+    <p id="loginErr" class="err" role="alert"></p>
+    <button class="btn primary wide" type="submit">Accedi</button>
+  </form>
+</section>
+
+<!-- ============ app ============ -->
+<div id="app" class="app" hidden>
+  <aside class="machine">
+    <header class="status" aria-live="polite">
+      <div class="tower" id="tower" aria-hidden="true"><i class="l-r"></i><i class="l-y"></i><i class="l-g"></i></div>
+      <div class="status-main">
+        <div class="st-name" id="stName">—</div>
+        <div class="st-desc" id="stDesc">In attesa di dati dalla macchina</div>
+      </div>
+      <button class="icon-btn" id="logoutBtn" title="Esci" aria-label="Esci">
+        <svg viewBox="0 0 24 24"><path d="M14 4h5v16h-5M10 8l-4 4 4 4M6 12h10"/></svg>
+      </button>
+    </header>
+
+    <ul class="chips" id="chips">
+      <li data-k="online"><b></b>Collegata</li>
+      <li data-k="hm"><b></b>Homing</li>
+      <li data-k="seat"><b></b>Portale in sede</li>
+      <li data-k="estop"><b></b>Emergenza</li>
+      <li data-k="curt"><b></b>Barriera</li>
+      <li data-k="en"><b></b>Driver</li>
+    </ul>
+
+    <figure class="scheme">
+      <div class="scheme-bar">
+        <span id="viewLabel">Vista laterale</span>
+        <div class="seg small" role="tablist" aria-label="Vista">
+          <button role="tab" aria-selected="true" data-view="side">Laterale</button>
+          <button role="tab" aria-selected="false" data-view="top">Dall'alto</button>
+        </div>
+      </div>
+      <svg id="scheme" viewBox="0 0 1000 300" role="img" aria-label="Schema del tavolo con posizione del rullo">
+        <defs>
+          <linearGradient id="gSteel" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="var(--steel-hi)"/><stop offset=".55" stop-color="var(--steel)"/><stop offset="1" stop-color="var(--steel-lo)"/>
+          </linearGradient>
+          <radialGradient id="gRoll" cx=".35" cy=".35" r=".8">
+            <stop offset="0" stop-color="var(--steel-hi)"/><stop offset=".6" stop-color="var(--steel)"/><stop offset="1" stop-color="var(--steel-lo)"/>
+          </radialGradient>
+          <pattern id="pHatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="var(--line)" stroke-width="2"/>
+          </pattern>
+        </defs>
+        <!-- vista laterale -->
+        <g id="side">
+          <rect x="40" y="250" width="920" height="14" fill="url(#gSteel)"/>
+          <rect x="40" y="264" width="920" height="22" fill="url(#pHatch)" opacity=".7"/>
+          <g class="post"><rect x="64" y="34" width="14" height="216"/><rect x="922" y="34" width="14" height="216"/></g>
+          <rect class="rail" x="58" y="26" width="884" height="12" rx="2"/>
+          <g class="limits"><line id="limL" x1="141" y1="22" x2="141" y2="250"/><line id="limR" x1="859" y1="22" x2="859" y2="250"/></g>
+          <line class="axis" x1="500" y1="242" x2="500" y2="290"/>
+          <text class="tick" x="500" y="298" text-anchor="middle">0</text>
+          <text class="tick" x="141" y="298" text-anchor="middle">−700</text>
+          <text class="tick" x="859" y="298" text-anchor="middle">+700</text>
+          <path id="dough" class="dough" d=""/>
+          <g id="carriage">
+            <rect class="zcol" x="-6" y="38" width="12" height="10"/>
+            <line id="zrod" class="zrod" x1="0" y1="38" x2="0" y2="100"/>
+            <g id="roller">
+              <circle r="23" fill="url(#gRoll)" class="roll"/>
+              <line id="spoke" class="spoke" x1="0" y1="0" x2="0" y2="-19"/>
+              <circle r="4" class="hub"/>
+            </g>
+            <g id="gapDim" class="dim">
+              <line id="gapLine" x1="34" y1="0" x2="34" y2="0"/>
+              <line id="gapT1" x1="28" y1="0" x2="40" y2="0"/>
+              <line x1="28" y1="250" x2="40" y2="250"/>
+              <text id="gapTxt" x="46" y="0">—</text>
+            </g>
+          </g>
+        </g>
+        <!-- vista dall'alto -->
+        <g id="top" hidden>
+          <rect class="tabletop" x="40" y="66" width="920" height="368" rx="4"/>
+          <rect class="rail" x="68" y="96" width="864" height="10"/>
+          <rect class="rail" x="68" y="394" width="864" height="10"/>
+          <g class="anchor"><rect x="49" y="75" width="46" height="46"/><rect x="905" y="75" width="46" height="46"/><rect x="49" y="379" width="46" height="46"/><rect x="905" y="379" width="46" height="46"/></g>
+          <ellipse id="doughTop" class="dough" cx="500" cy="250" rx="69" ry="69"/>
+          <g id="rollerTop"><rect x="-23" y="158" width="46" height="184" rx="6" fill="url(#gSteel)" class="roll"/><rect class="bridge" x="-4" y="100" width="8" height="300"/></g>
+          <text class="tick" x="500" y="458" text-anchor="middle">X 0</text>
+        </g>
+      </svg>
+      <figcaption id="schemeCap">Scala orizzontale reale; altezza del gap ingrandita.</figcaption>
+    </figure>
+
+    <dl class="readouts">
+      <div><dt>Rullo X</dt><dd><span id="roX">—</span><small>mm</small></dd></div>
+      <div><dt>Gap</dt><dd><span id="roG">—</span><small>mm</small></dd></div>
+      <div><dt>Passata</dt><dd><span id="roP">—</span></dd></div>
+    </dl>
+    <div class="progress" id="progress" hidden>
+      <div class="bar"><i id="progBar"></i></div>
+      <p id="progTxt"></p>
+    </div>
+
+    <button id="stopBtn" class="stop" type="button" aria-label="STOP: arresta la macchina">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>
+      STOP
+    </button>
+  </aside>
+
+  <main class="work">
+    <nav class="tabs" role="tablist" aria-label="Sezioni">
+      <button role="tab" data-tab="cmd" aria-selected="true">Macchina</button>
+      <button role="tab" data-tab="recipes" aria-selected="false">Ricette</button>
+      <button role="tab" data-tab="history" aria-selected="false">Storico</button>
+      <button role="tab" data-tab="params" aria-selected="false">Parametri</button>
+      <button role="tab" data-tab="log" aria-selected="false">Log</button>
+    </nav>
+
+    <!-- Macchina -->
+    <section class="pane" id="tab-cmd">
+      <h2>Comandi</h2>
+      <div class="grid4">
+        <button class="btn" data-cmd="HOME">Homing</button>
+        <button class="btn" id="enableBtn">Abilita driver</button>
+        <button class="btn" id="pauseBtn">Pausa</button>
+        <button class="btn" data-cmd="RESET">Reset allarmi</button>
+      </div>
+
+      <h2>Movimento manuale</h2>
+      <div class="jog">
+        <div class="seg" id="stepSeg" role="radiogroup" aria-label="Passo">
+          <button role="radio" aria-checked="false" data-step="0.1">0,1</button>
+          <button role="radio" aria-checked="true" data-step="1">1</button>
+          <button role="radio" aria-checked="false" data-step="10">10</button>
+          <button role="radio" aria-checked="false" data-step="50">50</button>
+          <span class="seg-unit">mm</span>
+        </div>
+        <div class="jog-row">
+          <span class="jog-lbl">Rullo X</span>
+          <button class="btn jogb" data-jog="X" data-dir="-1" aria-label="X meno"><svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg></button>
+          <button class="btn jogb" data-jog="X" data-dir="1" aria-label="X più"><svg viewBox="0 0 24 24"><path d="M9 5l7 7-7 7"/></svg></button>
+        </div>
+        <div class="jog-row">
+          <span class="jog-lbl">Gap</span>
+          <button class="btn jogb" data-jog="G" data-dir="-1" aria-label="Abbassa rullo"><svg viewBox="0 0 24 24"><path d="M5 9l7 7 7-7"/></svg></button>
+          <button class="btn jogb" data-jog="G" data-dir="1" aria-label="Alza rullo"><svg viewBox="0 0 24 24"><path d="M5 15l7-7 7 7"/></svg></button>
+        </div>
+        <form class="goto" id="gotoX">
+          <label for="gotoXv">Porta X a</label>
+          <input id="gotoXv" type="number" inputmode="decimal" step="0.1" placeholder="mm">
+          <button class="btn" type="submit">Vai</button>
+        </form>
+        <form class="goto" id="gotoG">
+          <label for="gotoGv">Porta gap a</label>
+          <input id="gotoGv" type="number" inputmode="decimal" step="0.1" placeholder="mm">
+          <button class="btn" type="submit">Vai</button>
+        </form>
+      </div>
+      <p class="last" id="lastResp" aria-live="polite"></p>
+    </section>
+
+    <!-- Ricette -->
+    <section class="pane" id="tab-recipes" hidden>
+      <div class="pane-head">
+        <h2>Ricette</h2>
+        <button class="btn primary" id="newRecipe">Nuova ricetta</button>
+      </div>
+      <ul class="recipes" id="recipeList"></ul>
+    </section>
+
+    <!-- Storico -->
+    <section class="pane" id="tab-history" hidden>
+      <div class="pane-head"><h2>Storico cicli</h2><button class="btn" id="histReload">Aggiorna</button></div>
+      <ul class="history" id="historyList"></ul>
+    </section>
+
+    <!-- Parametri -->
+    <section class="pane" id="tab-params" hidden>
+      <div class="pane-head">
+        <h2>Parametri macchina</h2>
+        <button class="btn" id="paramsRead">Leggi tutti</button>
+      </div>
+      <p class="hint">Le modifiche diventano attive con Imposta; restano dopo lo spegnimento solo con Salva in EEPROM.</p>
+      <div class="params" id="paramList"></div>
+      <div class="grid2">
+        <button class="btn primary" id="paramsSave">Salva in EEPROM</button>
+        <button class="btn danger-o" id="paramsDefaults">Ripristina default</button>
+      </div>
+    </section>
+
+    <!-- Log -->
+    <section class="pane" id="tab-log" hidden>
+      <div class="pane-head"><h2>Log</h2><button class="btn" id="logClear">Svuota</button></div>
+      <ol class="log" id="logList"></ol>
+    </section>
+  </main>
+</div>
+
+<!-- dialog ricetta -->
+<dialog id="recipeDlg" class="sheet">
+  <form id="recipeForm" method="dialog">
+    <h2 id="recipeDlgTitle">Ricetta</h2>
+    <label class="full">Nome<input name="name" required maxlength="80"></label>
+    <div class="fields">
+      <label>Gap iniziale <small>g0 mm</small><input name="g0" type="number" step="0.1" required></label>
+      <label>Gap finale <small>g1 mm</small><input name="g1" type="number" step="0.1" required></label>
+      <label>Riduzione per passata <small>dg mm</small><input name="dg" type="number" step="0.1" required></label>
+      <label>Passate extra <small>n</small><input name="n" type="number" step="1" min="0" required></label>
+      <label>Semicorsa iniziale <small>s0 mm</small><input name="s0" type="number" step="1" required></label>
+      <label>Semicorsa finale <small>s1 mm</small><input name="s1" type="number" step="1" required></label>
+      <label>Velocità <small>f mm/s</small><input name="f" type="number" step="1" required></label>
+      <label>Centro impasto <small>cx mm</small><input name="cx" type="number" step="1" required></label>
+      <label>Overdrive rullo <small>od %</small><input name="od" type="number" step="0.1" required></label>
+    </div>
+    <label class="full">Note<textarea name="note" rows="2" maxlength="2000"></textarea></label>
+    <p class="preview" id="recipePreview"></p>
+    <p class="err" id="recipeErr" role="alert"></p>
+    <div class="dlg-actions">
+      <button type="button" class="btn danger-o" id="recipeDelete">Elimina</button>
+      <span class="sp"></span>
+      <button type="button" class="btn" value="cancel" id="recipeCancel">Annulla</button>
+      <button type="submit" class="btn primary" id="recipeSave">Salva</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- dialog conferma -->
+<dialog id="confirmDlg" class="sheet narrow">
+  <form method="dialog">
+    <h2 id="confirmTitle">Conferma</h2>
+    <div id="confirmBody"></div>
+    <div class="dlg-actions">
+      <span class="sp"></span>
+      <button class="btn" value="no">Annulla</button>
+      <button class="btn primary" value="yes" id="confirmYes">Conferma</button>
+    </div>
+  </form>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-logo" viewBox="0 0 64 64">
+    <rect x="4" y="46" width="56" height="8" rx="2" fill="currentColor" opacity=".35"/>
+    <path d="M10 46c4-7 40-7 44 0z" fill="#e2b872"/>
+    <circle cx="32" cy="27" r="13" fill="none" stroke="currentColor" stroke-width="5"/>
+    <circle cx="32" cy="27" r="3" fill="currentColor"/>
+  </symbol>
+</svg>
+
+<script src="/static/app.js"></script>
+</body>
+</html>

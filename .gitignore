@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+server/.env
+server/data/
+server/mosquitto/config/passwd
+firmware/test/build/
+firmware/test/*.out
+firmware/.pio/
+android/.gradle/
+android/build/
+android/app/build/
+android/local.properties
+cad/build/manipmasta_3d_fragment.html

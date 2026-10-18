@@ -1,0 +1,110 @@
+name: Android APK
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+    paths:
+      - 'android/**'
+      - '.github/workflows/android.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: android-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build APK
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: android
+    env:
+      # Firma release opzionale: se i secret non esistono l'APK release resta non firmato.
+      MM_KEYSTORE_BASE64: ${{ secrets.MM_KEYSTORE_BASE64 }}
+      MM_KEYSTORE_PASSWORD: ${{ secrets.MM_KEYSTORE_PASSWORD }}
+      MM_KEY_ALIAS: ${{ secrets.MM_KEY_ALIAS }}
+      MM_KEY_PASSWORD: ${{ secrets.MM_KEY_PASSWORD }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Gradle 8.10.2
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.10.2'
+
+      - name: Versione
+        run: |
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            echo "MM_VERSION_NAME=${GITHUB_REF_NAME#v}" >> "$GITHUB_ENV"
+          else
+            echo "MM_VERSION_NAME=1.0.0-ci.${GITHUB_RUN_NUMBER}" >> "$GITHUB_ENV"
+          fi
+          echo "MM_VERSION_CODE=${GITHUB_RUN_NUMBER}" >> "$GITHUB_ENV"
+
+      - name: Keystore release (se configurato)
+        if: env.MM_KEYSTORE_BASE64 != ''
+        run: |
+          echo "$MM_KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/release.jks"
+          echo "MM_KEYSTORE_FILE=$RUNNER_TEMP/release.jks" >> "$GITHUB_ENV"
+
+      - name: Build debug + release
+        run: gradle --no-daemon --stacktrace assembleDebug assembleRelease
+
+      - name: Raccogli APK
+        run: |
+          mkdir -p dist
+          cp app/build/outputs/apk/debug/app-debug.apk "dist/ManipMasta-${MM_VERSION_NAME}-debug.apk"
+          for f in app/build/outputs/apk/release/*.apk; do
+            suffix="$(basename "$f" .apk)"
+            suffix="${suffix#app-}"
+            cp "$f" "dist/ManipMasta-${MM_VERSION_NAME}-${suffix}.apk"
+          done
+          ls -l dist
+
+      - name: Carica artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: manipmasta-apk
+          path: android/dist/*.apk
+          if-no-files-found: error
+          retention-days: 30
+
+  release:
+    name: Release GitHub
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Scarica APK
+        uses: actions/download-artifact@v4
+        with:
+          name: manipmasta-apk
+          path: dist
+
+      - name: Crea release con gli APK
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          ls -l dist
+          if gh release view "$GITHUB_REF_NAME" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" dist/*.apk --repo "$GITHUB_REPOSITORY" --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" dist/*.apk \
+              --repo "$GITHUB_REPOSITORY" \
+              --title "ManipMasta $GITHUB_REF_NAME" \
+              --generate-notes
+          fi

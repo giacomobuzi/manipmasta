@@ -1,0 +1,24 @@
+# ACL Mosquitto per ManipMasta (prefisso topic: manipmasta)
+# Utenti creati da scripts/create_mqtt_users.sh
+
+# Server FastAPI: pubblica i comandi, legge stato/eventi/risposte
+user manipmasta-server
+topic write manipmasta/cmd
+topic read manipmasta/state
+topic read manipmasta/event
+topic read manipmasta/resp
+topic read manipmasta/online
+
+# Arduino Mega (e simulatore, che si comporta come lui)
+user manipmasta
+topic read manipmasta/cmd
+topic write manipmasta/resp
+topic write manipmasta/state
+topic write manipmasta/event
+topic readwrite manipmasta/online
+topic read manipmasta/sim
+
+# Facoltativo: utente di diagnostica (mosquitto_sub/pub dal PC, guasti simulati)
+user manipmasta-tools
+topic read manipmasta/#
+topic write manipmasta/sim

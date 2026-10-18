@@ -1,0 +1,7 @@
+.env
+data
+mosquitto
+tests
+__pycache__
+.pytest_cache
+*.db

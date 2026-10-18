@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="mm_primary">#FFF0BE8C</color>
+    <color name="mm_on_primary">#FF4A2800</color>
+    <color name="mm_primary_container">#FF6A3C12</color>
+    <color name="mm_on_primary_container">#FFFFDCC0</color>
+    <color name="mm_secondary">#FFE3C0A6</color>
+    <color name="mm_on_secondary">#FF422B19</color>
+</resources>

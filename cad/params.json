@@ -1,0 +1,13 @@
+{
+  "_nota": "Misure in mm. Sostituire table_* con le misure reali del tavolo, poi: python3 cad/model.py && python3 cad/drawings.py && python3 cad/build_viewer.py",
+  "table_L": 2000,
+  "table_W": 800,
+  "table_H": 900,
+  "table_top": 40,
+  "anchor_x": 930,
+  "anchor_y": 340,
+  "roller_d": 100,
+  "roller_len": 370,
+  "x_travel": 700,
+  "gap_ref": 40
+}

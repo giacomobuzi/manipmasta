@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Politica di rete ManipMasta.
+  - Default: SOLO HTTPS (cleartext vietato), CA di sistema.
+  - HTTP in chiaro consentito solo verso host di rete locale elencati qui sotto.
+    Android non supporta intervalli CIDR (es. 192.168.0.0/16): gli IP vanno elencati uno per uno.
+    Per usare un altro IP LAN in http aggiungere una riga <domain> e ricompilare,
+    oppure usare un nome host *.lan / *.local / *.home.arpa / *.internal (già consentiti).
+  - Sugli host LAN sono accettate anche CA installate dall'utente (certificati interni del homelab).
+  L'app inoltre rifiuta, nelle Impostazioni, URL http verso host non privati.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="false">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+
+    <domain-config cleartextTrafficPermitted="true">
+        <!-- loopback ed emulatore -->
+        <domain includeSubdomains="false">localhost</domain>
+        <domain includeSubdomains="false">127.0.0.1</domain>
+        <domain includeSubdomains="false">10.0.2.2</domain>
+        <!-- VM ManipMasta (VLAN IoT, SPEC §2.2: broker/VM 192.168.50.10) -->
+        <domain includeSubdomains="false">192.168.50.10</domain>
+        <!-- nomi host di rete locale -->
+        <domain includeSubdomains="true">local</domain>
+        <domain includeSubdomains="true">lan</domain>
+        <domain includeSubdomains="true">home.arpa</domain>
+        <domain includeSubdomains="true">internal</domain>
+        <domain includeSubdomains="true">localdomain</domain>
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </domain-config>
+</network-security-config>

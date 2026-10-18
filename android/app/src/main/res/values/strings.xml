@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ManipMasta</string>
+
+    <!-- Schermata principale -->
+    <string name="stop">STOP</string>
+    <string name="stop_description">Arresto macchina</string>
+    <string name="settings">Impostazioni</string>
+    <string name="settings_title">Impostazioni</string>
+    <string name="error_title">Server non raggiungibile</string>
+    <string name="error_hint">Controlla la rete e l\'indirizzo del server nelle impostazioni.</string>
+    <string name="retry">Riprova</string>
+    <string name="error_ssl">Certificato HTTPS non valido o non attendibile.</string>
+    <string name="stop_sent">STOP inviato</string>
+    <string name="stop_failed">STOP NON inviato: %1$s</string>
+    <string name="stop_unauthorized">STOP rifiutato: token non valido (HTTP %1$d)</string>
+    <string name="stop_invalid_url">URL del server non valido</string>
+
+    <!-- Impostazioni -->
+    <string name="pref_cat_server">Server</string>
+    <string name="pref_url_title">URL server</string>
+    <string name="pref_url_dialog">Es. https://manipmasta.tuodominio.it oppure http://192.168.50.10:8080 (http solo in rete locale)</string>
+    <string name="pref_token_title">Token API</string>
+    <string name="pref_token_dialog">Token Bearer configurato sul server (API_TOKEN). Salvato cifrato sul dispositivo.</string>
+    <string name="token_set">Impostato (nascosto)</string>
+    <string name="token_not_set">Non impostato</string>
+    <string name="pref_test_title">Test connessione</string>
+    <string name="pref_test_summary">Verifica /api/health e la validità del token</string>
+    <string name="pref_cat_device">Schermo e notifiche</string>
+    <string name="pref_keep_screen_title">Mantieni schermo acceso</string>
+    <string name="pref_keep_screen_summary">Lo schermo resta acceso finché l\'app è in primo piano</string>
+    <string name="pref_notify_title">Notifiche fine ciclo</string>
+    <string name="pref_notify_summary">Fine ciclo, allarmi ed emergenza tramite connessione WebSocket in background (notifica fissa)</string>
+    <string name="pref_cat_info">Informazioni</string>
+    <string name="pref_version_title">Versione</string>
+    <string name="url_invalid">URL non valido: usa http:// o https://</string>
+    <string name="url_http_not_lan">http in chiaro è ammesso solo verso indirizzi di rete locale. Usa https.</string>
+    <string name="notif_permission_denied">Permesso notifiche negato: gli avvisi non verranno mostrati</string>
+
+    <!-- Test connessione -->
+    <string name="test_running">Verifica in corso…</string>
+    <string name="test_health_fail">Server non raggiungibile: %1$s</string>
+    <string name="test_ok_token_ok">Server OK, token valido</string>
+    <string name="test_ok_token_bad">Server OK, ma token NON valido (HTTP %1$d)</string>
+    <string name="test_ok_no_token">Server OK, token non impostato</string>
+    <string name="test_ok_state_other">Server OK, /api/state ha risposto HTTP %1$d</string>
+    <string name="err_cleartext">http in chiaro bloccato dalla politica di rete: usa https o un host consentito (vedi README)</string>
+    <string name="err_ssl">errore certificato HTTPS</string>
+    <string name="err_host">host sconosciuto</string>
+    <string name="err_timeout">timeout</string>
+    <string name="err_http">HTTP %1$d</string>
+
+    <!-- Notifiche -->
+    <string name="ch_monitor_name">Monitoraggio macchina</string>
+    <string name="ch_monitor_desc">Notifica fissa del collegamento con il server</string>
+    <string name="ch_events_name">Eventi macchina</string>
+    <string name="ch_events_desc">Fine ciclo, allarmi, emergenza</string>
+    <string name="monitor_title">ManipMasta – monitoraggio attivo</string>
+    <string name="monitor_connecting">Connessione al server…</string>
+    <string name="monitor_connected">Connesso, in attesa di eventi</string>
+    <string name="monitor_reconnecting">Server non raggiungibile, nuovo tentativo…</string>
+    <string name="monitor_offline">Connesso al server, macchina OFFLINE</string>
+    <string name="monitor_bad_config">Configurazione non valida: controlla URL e token</string>
+    <string name="monitor_disable">Disattiva</string>
+    <string name="ev_cycle_done_title">Ciclo completato</string>
+    <string name="ev_cycle_done_text">La sfogliatura è terminata, il rullo è sollevato.</string>
+    <string name="ev_alarm_title">ALLARME macchina</string>
+    <string name="ev_estop_title">EMERGENZA attiva</string>
+    <string name="ev_estop_text">Fungo di emergenza o catena di sicurezza aperta.</string>
+</resources>

@@ -1,0 +1,1 @@
+"""ManipMasta — software lato VM."""

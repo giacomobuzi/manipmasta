@@ -1,0 +1,53 @@
+Codice;Descrizione;Specifica;Qta;EUR_unit_stima;Fornitore;Note
+M01;Guida supportata SBR20 L=1800;SBR20 albero Ø20 cromato (o inox) con base alluminio, L 1800;2;65;Fornitore componenti lineari (es. negozio CNC, Misumi, RS);Montare con grasso alimentare NSF H1
+M02;Pattino aperto SBR20UU;SBR20UU, foratura 4×M6 [verificare interassi];4;12;idem;
+M03;Albero rettificato Ø16 h6 inox L=380;AISI 440C / 304 cromato Ø16 h6;4;18;idem;Guide asse Z
+M04;Supporto albero SK16;SK16 alluminio;8;5;idem;
+M05;Pattino chiuso SC16UU;SC16UU con boccola LM16UU;4;9;idem;
+M06;Vite trapezia TR16×4 L=420 + chiocciola flangiata;TR16x4 destra, chiocciola bronzo flangiata;2;35;idem;Autobloccante: il rullo non cade a motori spenti
+M07;Supporti vite BK12 + BF12 (coppia);BK12/BF12 con estremità vite lavorata Ø12;2;30;idem;Lavorazione estremità vite: chiedere al fornitore della vite
+M08;Giunto elastico 8→12;giunto a soffietto/oldham Ø25 L30, foro 8 e 12;2;12;idem;Motori Z
+M09;Giunto elastico 8→14;giunto a soffietto Ø32, foro 8 e 14;1;15;idem;Motore X
+M10;Supporto flangiato inox SUCF204;SUCF204 inox foro 20, flangia quadra 4 fori interasse 64;2;38;Ricambi cuscinetti / SKF-NTN rivenditore;Supporti rullo
+M11;Supporto flangiato KFL002;KFL002 foro 15 (o inox SFL202);4;9;idem;Albero di sincronismo X
+M12;Puleggia HTD-5M 20T per cinghia 15, foro 15 con cava;HTD 5M 20T b15, foro finito 15H7 + cava 5;2;16;Trasmissioni (es. Mädler, Misumi);Motrici asse X
+M13;Puleggia folle HTD-5M 20T con cuscinetti;rinvio 20T b15 con 2 cuscinetti, perno M8;2;18;idem;Rinvii asse X
+M14;Cinghia aperta HTD-5M larghezza 15;HTD-5M-15 aperta, 5 m (2 × 3,9 m);1;45;idem;Fissata ai carrelli con morsetti
+M15;Puleggia HTD-5M 20T foro 8 (motore R);HTD 5M 20T b15 foro 8 con grani;1;14;idem;
+M16;Puleggia HTD-5M 40T foro 20 con cava (rullo);HTD 5M 40T b15 foro 20H7 + cava 6;1;28;idem;
+M17;Cinghia chiusa HTD 425-5M-15;HTD 425-5M larghezza 15;1;12;idem;Verificare lunghezza a montaggio (tendicinghia ±6 mm)
+M18;Morsetto cinghia HTD-5M 15;piastrina di bloccaggio dentata;4;6;idem;
+M19;Perno a sfere Ø8 × 110 con anello;ball lock pin Ø8 (es. GN 113 / KIPP K0790), inox;2;25;Ganter / KIPP / Elesa;Bloccaggio portale su A1 e A2
+M20;Catena portacavi 15×30 R48;igus E2 micro serie 15 o equivalente, 1,2 m + attacchi;1;45;igus / rivenditore;
+M21;Viteria inox A2/A4 assortita;M5, M6, M8, M12, rondelle, grani;1;60;Ferramenta industriale;
+M22;Grasso alimentare NSF H1;es. lubrificante H1 per guide;1;18;idem;
+A01;Kit motore NEMA23 closed-loop 2 Nm + driver;NEMA23 2 Nm encoder 1000 lin. + driver CL57T (o HSS57) + cavi;4;85;StepperOnline / rivenditore CNC;X, Z1, Z2, R
+S01;Sensore induttivo M12 PNP NO 24 V;M12 Sn 4 mm schermato, 3 fili, cavo 2 m (o connettore M12);8;14;Automazione (es. Omron, Sick, Pepperl+Fuchs o equivalenti);X_MIN, X_MAX, Z1/Z2 HOME, Z1/Z2 LOW, SEAT A/B
+S02;Barriera fotoelettrica di sicurezza (coppia);tipo 2 o 4, risoluzione 30 mm, altezza 300, OSSD PNP;2;380;Automazione sicurezza;Lati lunghi: consigliata per uso con operatori
+E01;Arduino Mega 2560 Rev3 (originale);A000067;1;45;store.arduino.cc / distributori;
+E02;Arduino Ethernet Shield 2;A000024 (W5500);1;30;idem;
+E03;Screw shield / morsettiera per Mega;proto shield con morsetti a vite;1;18;idem;
+E04;Scheda ingressi optoisolati 8 canali 24→5 V;PC817 8 canali;2;9;Elettronica;U6 sensori, U7 sicurezza/pulsanti
+E05;Modulo 4 relè 5 V attivo ALTO;4 relè 10 A, ingresso optoisolato, jumper livello;1;9;Elettronica;Bobine da U9
+E06;Convertitore DC/DC 24→5 V 1 A (U9);modulo DIN o buck isolato;1;15;Elettronica;
+E07;Buffer 74HCT245 su millefori (opz.);se l'assorbimento ingressi driver supera i limiti del Mega;1;6;Elettronica;Opzionale
+Q01;Alimentatore 48 V 480 W DIN;Mean Well SDR-480-48;1;120;Distributore Mean Well;Driver motori
+Q02;Alimentatore 24 V 60 W DIN;Mean Well HDR-60-24;1;30;idem;Sensori, relè, colonna
+Q03;Alimentatore 12 V 15 W DIN;Mean Well HDR-15-12;1;15;idem;Vin Arduino
+Q04;Interruttore magnetotermico 2P C10;6 kA;1;25;Materiale elettrico;
+Q05;Modulo relè di sicurezza 2 canali cat. 3;es. Pilz PNOZ s4, Schneider XPS, Phoenix PSR;1;180;Automazione sicurezza;
+Q06;Contattore 9 A bobina 24 V DC + contatto ausiliario NC;es. Schneider LC1K09 + ausiliario;2;35;Materiale elettrico;KM1 + KM2 in serie
+Q07;Fungo di emergenza 2NC ritenuta, testa Ø40;con collare giallo;1;35;idem;
+Q08;Pulsanti Ø22: START verde NO, STOP rosso NC, RESET blu NO;;3;12;idem;
+Q09;Colonna luminosa 24 V verde/giallo/rosso + buzzer;;1;55;idem;
+Q10;Portafusibili DIN + fusibili 5 A;10×38;4;8;idem;Uno per driver
+Q11;Cassetta inox IP65 500×400×250 con piastra;AISI 304;1;260;idem;
+Q12;Ventilazione filtrata IP54 + griglia;24 V;1;45;idem;
+Q13;Guida DIN, canaline, morsetti, capicorda, targhette;;1;90;idem;
+Q14;Connettore Harting Han-Modular 24B completo;moduli EE 8p ×2 (fasi) + DD 12p ×2 (encoder) + PE, custodia e base;1;160;Harting / distributore;Motori: il portale si stacca
+Q15;Connettore Harting Han 16E completo;sensori e barriera;1;70;idem;
+Q16;Cavo motore 4×1,0 schermato per catena (chainflex);metri;16;6;igus / Lapp;
+Q17;Cavo encoder 6×0,25 schermato per catena;metri;16;5;idem;
+Q18;Cavo sensori 3×0,34 PUR;metri;25;1.5;idem;
+Q19;Cavo alimentazione H07RN-F 3G1,5 + spina;3 m;1;18;idem;
+Q20;Patch Ethernet Cat6 S/FTP;verso switch VLAN IoT;1;10;Informatica;

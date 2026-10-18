@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFFFF</color>
+    <color name="stop_red">#FFC62828</color>
+    <color name="ic_launcher_background">#FFF3E3C8</color>
+
+    <color name="mm_primary">#FF8B5A2B</color>
+    <color name="mm_on_primary">#FFFFFFFF</color>
+    <color name="mm_primary_container">#FFFFDCC0</color>
+    <color name="mm_on_primary_container">#FF2E1500</color>
+    <color name="mm_secondary">#FF745944</color>
+    <color name="mm_on_secondary">#FFFFFFFF</color>
+</resources>

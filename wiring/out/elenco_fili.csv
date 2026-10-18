@@ -1,0 +1,184 @@
+N. filo;Da;A;Segnale;Sezione mm2;Colore;Note
+1;X0:L;Q1:1;L 230 V;1,5;marrone;ingresso rete da W0
+2;X0:N;Q1:3;N;1,5;blu chiaro;
+3;Q1:2;Q2:1;L;1,5;marrone;
+4;Q1:4;Q2:N;N;1,5;blu chiaro;
+5;Q2:2;X1:1;L;1,5;marrone;ponticello X1:1-3
+6;Q2:N;X1:4;N;1,5;blu chiaro;ponticello X1:4-6
+7;X1:1;F1:1;L PSU1;1,5;marrone;
+8;X1:2;F2:1;L PSU2;1,5;marrone;
+9;X1:3;F3:1;L PSU3;1,5;marrone;
+10;F1:2;KM1:1;L PSU1;1,5;marrone;
+11;X1:4;KM1:3;N PSU1;1,5;blu chiaro;
+12;KM1:2;PSU1:L;L PSU1 sotto sicurezza;1,5;marrone;
+13;KM1:4;PSU1:N;N PSU1 sotto sicurezza;1,5;blu chiaro;
+14;F2:2;PSU2:L;L PSU2;1,5;marrone;
+15;X1:5;PSU2:N;N PSU2;1,5;blu chiaro;
+16;F3:2;PSU3:L;L PSU3;1,5;marrone;
+17;X1:6;PSU3:N;N PSU3;1,5;blu chiaro;
+PE1;X0:PE;BPE;PE rete;2,5;giallo-verde;
+PE2;BPE;PSU1:FG;PE;1,5;giallo-verde;PSU2/PSU3 HDR in classe II: senza FG
+PE3;BPE;piastra di fondo;PE;2,5;giallo-verde;
+PE4;BPE;porta quadro;PE;6 (treccia);giallo-verde / treccia Cu;
+PE5;BPE;XP1:PE;PE portale;2,5;giallo-verde;prosegue con W9 al telaio portale
+PE6;BPE;XP2:PE;PE;1,5;giallo-verde;
+PE7;X2:5;BPE;ponte 0V48-PE;1,5;giallo-verde;PELV, un solo punto, rimovibile per prova isolamento
+PE8;X4:1;BPE;ponte 0V24-PE;1,5;giallo-verde;PELV, un solo punto, rimovibile per prova isolamento
+PE9;BPE;staffa schermi;PE schermi;2,5;giallo-verde;schermi cavi a terra solo lato quadro
+201;PSU1:+V;X2:1;+48 V;2,5;rosso;ponticello X2:1-4
+202;PSU1:-V;X2:5;0V48;2,5;nero;ponticello X2:5-9
+203;X2:1;F11:1;+48 V driver X;1,5;rosso;
+204;X2:2;F12:1;+48 V driver Z1;1,5;rosso;
+205;X2:3;F13:1;+48 V driver Z2;1,5;rosso;
+206;X2:4;F14:1;+48 V driver R;1,5;rosso;
+207;F11:2;U11:+Vdc;+48 V driver X;1,5;rosso;F11 fusibile 5 A ritardato 5x20
+208;F12:2;U12:+Vdc;+48 V driver Z1;1,5;rosso;F12 fusibile 5 A ritardato 5x20
+209;F13:2;U13:+Vdc;+48 V driver Z2;1,5;rosso;F13 fusibile 5 A ritardato 5x20
+210;F14:2;U14:+Vdc;+48 V driver R;1,5;rosso;F14 fusibile 5 A ritardato 5x20
+211;X2:6;U11:GND;0V48 driver X;1,5;nero;
+212;X2:7;U12:GND;0V48 driver Z1;1,5;nero;
+213;X2:8;U13:GND;0V48 driver Z2;1,5;nero;
+214;X2:9;U14:GND;0V48 driver R;1,5;nero;
+301;PSU2:+V;F4:1;+24 V;1,0;blu scuro;
+302;PSU2:+V;F5:1;+24 V;1,0;blu scuro;
+303;PSU2:-V;X4:1;0V24;1,0;blu/bianco;ponticello X4:1-12
+304;F4:2;X3:1;+24 V S (sicurezza);1,0;blu scuro;ponticello X3:1-4
+305;F5:2;X3:5;+24 V I/O;1,0;blu scuro;ponticello X3:5-13
+310;X3:2;K1:A1;+24 V S alim. K1;0,75;blu scuro;
+311;X4:2;K1:A2;0V24 K1;0,75;blu/bianco;
+312;K1:S11;S0:11;emergenza canale 1;0,5;blu scuro;verso porta
+313;S0:12;K1:S12;emergenza canale 1;0,5;blu scuro;
+314;K1:S21;S0:21;emergenza canale 2;0,5;blu scuro;
+315;S0:22;K1:S22;emergenza canale 2;0,5;blu scuro;
+316;K1:S33;S1:13;reset;0,5;blu scuro;
+317;S1:14;KM1:21;reset + retroazione;0,5;blu scuro;
+318;KM1:22;K1:S34;retroazione KM1 (NC);0,5;blu scuro;
+319;X3:3;K1:13;+24 V S;0,75;blu scuro;
+320;K1:14;K1:23;serie contatti sicuri;0,75;blu scuro;
+321;K1:24;KM1:A1;comando bobina KM1;0,75;blu scuro;soppressore su bobina
+322;KM1:A2;X4:3;0V24;0,75;blu/bianco;
+323;X3:4;K1:43;+24 V S;0,5;blu scuro;
+324;K1:44;U7:IN1;ESTOP_OK (24 V = OK);0,5;blu scuro;-> D2
+330;X3:6;LC1-TX:+24;+24 V emettitore;0,5;blu scuro;via W20
+331;X4:4;LC1-TX:0V;0V24;0,5;blu/bianco;via W20
+332;X3:7;LC1-RX:+24;+24 V ricevitore;0,5;blu scuro;via W21
+333;X4:5;LC1-RX:0V;0V24;0,5;blu/bianco;via W21
+334;LC1-RX:OSSD1;K2:A1;OSSD1;0,5;blu scuro;via W21
+335;K2:A2;X4:6;0V24;0,5;blu/bianco;
+336;LC1-RX:OSSD2;K3:A1;OSSD2;0,5;blu scuro;via W21
+337;K3:A2;X4:7;0V24;0,5;blu/bianco;
+338;X3:8;K2:11;+24 V I/O;0,5;blu scuro;
+339;K2:14;K3:11;serie K2-K3;0,5;blu scuro;
+340;K3:14;U7:IN2;CURTAIN_OK (24 V = libera);0,5;blu scuro;-> D3
+341;X3:9;S2:13;+24 V I/O;0,5;blu scuro;
+342;S2:14;U7:IN3;BTN_START;0,5;blu scuro;-> D48
+343;X3:10;S3:11;+24 V I/O;0,5;blu scuro;
+344;S3:12;U7:IN4;BTN_STOP (NC);0,5;blu scuro;-> D49
+345;X4:8;U7:COM;0V24 ingressi U7;0,5;blu/bianco;
+350;X3:11;XP2:1;+24 V sensori;0,75;blu scuro;
+351;X4:9;XP2:2;0V24 sensori;0,75;blu/bianco;
+352;XP2:3;U6:IN1;X_MIN (B1);0,5;blu scuro;-> D38
+353;XP2:4;U6:IN2;X_MAX (B2);0,5;blu scuro;-> D39
+354;XP2:5;U6:IN3;Z1_HOME (B3);0,5;blu scuro;-> D40
+355;XP2:6;U6:IN4;Z2_HOME (B4);0,5;blu scuro;-> D41
+356;XP2:7;U6:IN5;Z1_LOW (B5);0,5;blu scuro;-> D42
+357;XP2:8;U6:IN6;Z2_LOW (B6);0,5;blu scuro;-> D43
+358;XP2:9;U6:IN7;SEAT_A (B7);0,5;blu scuro;-> D44
+359;XP2:10;U6:IN8;SEAT_B (B8);0,5;blu scuro;-> D45
+360;X4:10;U6:COM;0V24 ingressi U6;0,5;blu/bianco;
+370;X3:12;U8:COM1;+24 V colonna;0,5;blu scuro;ponticelli COM1-COM4
+371;U8:NO1;H1;lampada VERDE;0,5;blu scuro;via W22
+372;U8:NO2;H2;lampada GIALLA;0,5;blu scuro;via W22
+373;U8:NO3;H3;lampada ROSSA;0,5;blu scuro;via W22
+374;U8:NO4;H4;BUZZER;0,5;blu scuro;via W22
+375;X4:11;H comune;0V colonna luminosa;0,5;blu/bianco;via W22
+380;X3:13;U9:+Vin;+24 V DC/DC;0,5;blu scuro;
+381;X4:12;U9:-Vin;0V24 DC/DC;0,5;blu/bianco;
+382;U9:+Vout;U8:JD-VCC;+5 V bobine rele;0,5;rosso;togliere ponticello JD-VCC/VCC
+383;U9:-Vout;U8:GND(JD);0 V bobine rele;0,5;nero;
+400;A1:5V;X7:1;+5 V logica;0,5;rosso;ponticello X7:1-4
+401;A1:GND;X6:1;GND logica;0,5;nero;ponticello X6:1-8
+411;A1:D22;U11:PUL+;X_PUL;0,5;viola;
+412;A1:D23;U11:DIR+;X_DIR;0,5;viola;
+413;A1:D24;U11:ENA+;X_ENA (ALTO=disabilitato);0,5;viola;
+414;U11:ALM+;A1:D25;X_ALM (BASSO=allarme);0,5;grigio;INPUT_PULLUP
+415;X6:2;U11:PUL-;GND logica X;0,5;nero;ponticelli PUL-/DIR-/ENA-/ALM- sul driver
+421;A1:D26;U12:PUL+;Z1_PUL;0,5;viola;
+422;A1:D27;U12:DIR+;Z1_DIR;0,5;viola;
+423;A1:D28;U12:ENA+;Z1_ENA (ALTO=disabilitato);0,5;viola;
+424;U12:ALM+;A1:D29;Z1_ALM (BASSO=allarme);0,5;grigio;INPUT_PULLUP
+425;X6:3;U12:PUL-;GND logica Z1;0,5;nero;ponticelli PUL-/DIR-/ENA-/ALM- sul driver
+431;A1:D30;U13:PUL+;Z2_PUL;0,5;viola;
+432;A1:D31;U13:DIR+;Z2_DIR;0,5;viola;
+433;A1:D32;U13:ENA+;Z2_ENA (ALTO=disabilitato);0,5;viola;
+434;U13:ALM+;A1:D33;Z2_ALM (BASSO=allarme);0,5;grigio;INPUT_PULLUP
+435;X6:4;U13:PUL-;GND logica Z2;0,5;nero;ponticelli PUL-/DIR-/ENA-/ALM- sul driver
+441;A1:D34;U14:PUL+;R_PUL;0,5;viola;
+442;A1:D35;U14:DIR+;R_DIR;0,5;viola;
+443;A1:D36;U14:ENA+;R_ENA (ALTO=disabilitato);0,5;viola;
+444;U14:ALM+;A1:D37;R_ALM (BASSO=allarme);0,5;grigio;INPUT_PULLUP
+445;X6:5;U14:PUL-;GND logica R;0,5;nero;ponticelli PUL-/DIR-/ENA-/ALM- sul driver
+501;U6:OUT1;A1:D38;X_MIN;0,5;grigio;BASSO = attivo
+502;U6:OUT2;A1:D39;X_MAX;0,5;grigio;BASSO = attivo
+503;U6:OUT3;A1:D40;Z1_HOME;0,5;grigio;BASSO = attivo
+504;U6:OUT4;A1:D41;Z2_HOME;0,5;grigio;BASSO = attivo
+505;U6:OUT5;A1:D42;Z1_LOW;0,5;grigio;BASSO = attivo
+506;U6:OUT6;A1:D43;Z2_LOW;0,5;grigio;BASSO = attivo
+507;U6:OUT7;A1:D44;SEAT_A;0,5;grigio;BASSO = attivo
+508;U6:OUT8;A1:D45;SEAT_B;0,5;grigio;BASSO = attivo
+509;X7:2;U6:VCC;+5 V;0,5;rosso;
+510;X6:6;U6:GND;GND logica;0,5;nero;
+511;U7:OUT1;A1:D2;ESTOP_OK;0,5;grigio;
+512;U7:OUT2;A1:D3;CURTAIN_OK;0,5;grigio;
+513;U7:OUT3;A1:D48;BTN_START;0,5;grigio;
+514;U7:OUT4;A1:D49;BTN_STOP;0,5;grigio;
+515;X7:3;U7:VCC;+5 V;0,5;rosso;
+516;X6:7;U7:GND;GND logica;0,5;nero;
+601;A1:D5;U8:IN1;H1 lampada VERDE;0,5;viola;attivo ALTO
+602;A1:D6;U8:IN2;H2 lampada GIALLA;0,5;viola;attivo ALTO
+603;A1:D7;U8:IN3;H3 lampada ROSSA;0,5;viola;attivo ALTO
+604;A1:D8;U8:IN4;H4 BUZZER;0,5;viola;attivo ALTO
+605;X7:4;U8:VCC;+5 V ingressi rele;0,5;rosso;
+606;X6:8;U8:GND;GND logica;0,5;nero;
+701;PSU3:+V;A1:Vin;+12 V;0,75;rosso;jack DC 5,5x2,1 o pin Vin
+702;PSU3:-V;A1:GND;0 V 12 V;0,75;nero;
+801;U11:A+;XP1:a1;M1 fase A+;1,0;nero (num.);prosegue W1 (nero)
+802;U11:A-;XP1:a2;M1 fase A-;1,0;nero (num.);prosegue W1 (verde)
+803;U11:B+;XP1:a3;M1 fase B+;1,0;nero (num.);prosegue W1 (rosso)
+804;U11:B-;XP1:a4;M1 fase B-;1,0;nero (num.);prosegue W1 (blu)
+805;U12:A+;XP1:a5;M2 fase A+;1,0;nero (num.);prosegue W3 (nero)
+806;U12:A-;XP1:a6;M2 fase A-;1,0;nero (num.);prosegue W3 (verde)
+807;U12:B+;XP1:a7;M2 fase B+;1,0;nero (num.);prosegue W3 (rosso)
+808;U12:B-;XP1:a8;M2 fase B-;1,0;nero (num.);prosegue W3 (blu)
+809;U13:A+;XP1:b1;M3 fase A+;1,0;nero (num.);prosegue W5 (nero)
+810;U13:A-;XP1:b2;M3 fase A-;1,0;nero (num.);prosegue W5 (verde)
+811;U13:B+;XP1:b3;M3 fase B+;1,0;nero (num.);prosegue W5 (rosso)
+812;U13:B-;XP1:b4;M3 fase B-;1,0;nero (num.);prosegue W5 (blu)
+813;U14:A+;XP1:b5;M4 fase A+;1,0;nero (num.);prosegue W7 (nero)
+814;U14:A-;XP1:b6;M4 fase A-;1,0;nero (num.);prosegue W7 (verde)
+815;U14:B+;XP1:b7;M4 fase B+;1,0;nero (num.);prosegue W7 (rosso)
+816;U14:B-;XP1:b8;M4 fase B-;1,0;nero (num.);prosegue W7 (blu)
+821;U11:EA+;XP1:c1;M1 encoder EA+;0,25 schermato;come cavo;prosegue W2 (nero)
+822;U11:EA-;XP1:c2;M1 encoder EA-;0,25 schermato;come cavo;prosegue W2 (blu)
+823;U11:EB+;XP1:c3;M1 encoder EB+;0,25 schermato;come cavo;prosegue W2 (giallo)
+824;U11:EB-;XP1:c4;M1 encoder EB-;0,25 schermato;come cavo;prosegue W2 (verde)
+825;U11:VCC;XP1:c5;M1 encoder VCC;0,25 schermato;come cavo;prosegue W2 (rosso)
+826;U11:EGND;XP1:c6;M1 encoder EGND;0,25 schermato;come cavo;prosegue W2 (bianco)
+827;U12:EA+;XP1:c7;M2 encoder EA+;0,25 schermato;come cavo;prosegue W4 (nero)
+828;U12:EA-;XP1:c8;M2 encoder EA-;0,25 schermato;come cavo;prosegue W4 (blu)
+829;U12:EB+;XP1:c9;M2 encoder EB+;0,25 schermato;come cavo;prosegue W4 (giallo)
+830;U12:EB-;XP1:c10;M2 encoder EB-;0,25 schermato;come cavo;prosegue W4 (verde)
+831;U12:VCC;XP1:c11;M2 encoder VCC;0,25 schermato;come cavo;prosegue W4 (rosso)
+832;U12:EGND;XP1:c12;M2 encoder EGND;0,25 schermato;come cavo;prosegue W4 (bianco)
+833;U13:EA+;XP1:d1;M3 encoder EA+;0,25 schermato;come cavo;prosegue W6 (nero)
+834;U13:EA-;XP1:d2;M3 encoder EA-;0,25 schermato;come cavo;prosegue W6 (blu)
+835;U13:EB+;XP1:d3;M3 encoder EB+;0,25 schermato;come cavo;prosegue W6 (giallo)
+836;U13:EB-;XP1:d4;M3 encoder EB-;0,25 schermato;come cavo;prosegue W6 (verde)
+837;U13:VCC;XP1:d5;M3 encoder VCC;0,25 schermato;come cavo;prosegue W6 (rosso)
+838;U13:EGND;XP1:d6;M3 encoder EGND;0,25 schermato;come cavo;prosegue W6 (bianco)
+839;U14:EA+;XP1:d7;M4 encoder EA+;0,25 schermato;come cavo;prosegue W8 (nero)
+840;U14:EA-;XP1:d8;M4 encoder EA-;0,25 schermato;come cavo;prosegue W8 (blu)
+841;U14:EB+;XP1:d9;M4 encoder EB+;0,25 schermato;come cavo;prosegue W8 (giallo)
+842;U14:EB-;XP1:d10;M4 encoder EB-;0,25 schermato;come cavo;prosegue W8 (verde)
+843;U14:VCC;XP1:d11;M4 encoder VCC;0,25 schermato;come cavo;prosegue W8 (rosso)
+844;U14:EGND;XP1:d12;M4 encoder EGND;0,25 schermato;come cavo;prosegue W8 (bianco)

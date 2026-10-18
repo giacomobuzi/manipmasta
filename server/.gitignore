@@ -1,0 +1,8 @@
+.env
+data/*.db*
+mosquitto/config/passwd
+mosquitto/data/*
+mosquitto/log/*
+!**/.gitkeep
+__pycache__/
+.pytest_cache/

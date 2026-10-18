@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tema unico Material3 DayNight senza ActionBar di sistema (Impostazioni usa una MaterialToolbar). -->
+    <style name="Theme.ManipMasta" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/mm_primary</item>
+        <item name="colorOnPrimary">@color/mm_on_primary</item>
+        <item name="colorPrimaryContainer">@color/mm_primary_container</item>
+        <item name="colorOnPrimaryContainer">@color/mm_on_primary_container</item>
+        <item name="colorSecondary">@color/mm_secondary</item>
+        <item name="colorOnSecondary">@color/mm_on_secondary</item>
+    </style>
+</resources>
