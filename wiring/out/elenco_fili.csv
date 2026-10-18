@@ -10,12 +10,14 @@ N. filo;Da;A;Segnale;Sezione mm2;Colore;Note
 9;X1:3;F3:1;L PSU3;1,5;marrone;
 10;F1:2;KM1:1;L PSU1;1,5;marrone;
 11;X1:4;KM1:3;N PSU1;1,5;blu chiaro;
-12;KM1:2;PSU1:L;L PSU1 sotto sicurezza;1,5;marrone;
-13;KM1:4;PSU1:N;N PSU1 sotto sicurezza;1,5;blu chiaro;
+12;KM1:2;KM2:1;L PSU1 serie KM1-KM2;1,5;marrone;
+13;KM1:4;KM2:3;N PSU1 serie KM1-KM2;1,5;blu chiaro;
 14;F2:2;PSU2:L;L PSU2;1,5;marrone;
 15;X1:5;PSU2:N;N PSU2;1,5;blu chiaro;
 16;F3:2;PSU3:L;L PSU3;1,5;marrone;
 17;X1:6;PSU3:N;N PSU3;1,5;blu chiaro;
+18;KM2:2;PSU1:L;L PSU1 sotto sicurezza;1,5;marrone;
+19;KM2:4;PSU1:N;N PSU1 sotto sicurezza;1,5;blu chiaro;
 PE1;X0:PE;BPE;PE rete;2,5;giallo-verde;
 PE2;BPE;PSU1:FG;PE;1,5;giallo-verde;PSU2/PSU3 HDR in classe II: senza FG
 PE3;BPE;piastra di fondo;PE;2,5;giallo-verde;
@@ -41,7 +43,7 @@ PE9;BPE;staffa schermi;PE schermi;2,5;giallo-verde;schermi cavi a terra solo lat
 214;X2:9;U14:GND;0V48 driver R;1,5;nero;
 301;PSU2:+V;F4:1;+24 V;1,0;blu scuro;
 302;PSU2:+V;F5:1;+24 V;1,0;blu scuro;
-303;PSU2:-V;X4:1;0V24;1,0;blu/bianco;ponticello X4:1-12
+303;PSU2:-V;X4:1;0V24;1,0;blu/bianco;ponticello X4:1-13
 304;F4:2;X3:1;+24 V S (sicurezza);1,0;blu scuro;ponticello X3:1-4
 305;F5:2;X3:5;+24 V I/O;1,0;blu scuro;ponticello X3:5-13
 310;X3:2;K1:A1;+24 V S alim. K1;0,75;blu scuro;
@@ -52,13 +54,16 @@ PE9;BPE;staffa schermi;PE schermi;2,5;giallo-verde;schermi cavi a terra solo lat
 315;S0:22;K1:S22;emergenza canale 2;0,5;blu scuro;
 316;K1:S33;S1:13;reset;0,5;blu scuro;
 317;S1:14;KM1:21;reset + retroazione;0,5;blu scuro;
-318;KM1:22;K1:S34;retroazione KM1 (NC);0,5;blu scuro;
-319;X3:3;K1:13;+24 V S;0,75;blu scuro;
-320;K1:14;K1:23;serie contatti sicuri;0,75;blu scuro;
-321;K1:24;KM1:A1;comando bobina KM1;0,75;blu scuro;soppressore su bobina
-322;KM1:A2;X4:3;0V24;0,75;blu/bianco;
-323;X3:4;K1:43;+24 V S;0,5;blu scuro;
-324;K1:44;U7:IN1;ESTOP_OK (24 V = OK);0,5;blu scuro;-> D2
+318;KM1:22;KM2:21;retroazione KM1-KM2 (NC in serie);0,5;blu scuro;
+319;KM2:22;K1:S34;retroazione KM2 (NC);0,5;blu scuro;
+320;X3:3;K1:13;+24 V S;0,75;blu scuro;
+321;K1:13;K1:23;+24 V S ai 2 canali di uscita;0,75;blu scuro;ponticello sul modulo K1
+322;K1:14;KM1:A1;comando bobina KM1 (canale 1);0,75;blu scuro;soppressore su bobina
+323;KM1:A2;X4:3;0V24;0,75;blu/bianco;
+324;K1:24;KM2:A1;comando bobina KM2 (canale 2);0,75;blu scuro;soppressore su bobina
+325;KM2:A2;X4:13;0V24;0,75;blu/bianco;
+326;X3:4;K1:43;+24 V S;0,5;blu scuro;
+327;K1:44;U7:IN1;ESTOP_OK (24 V = OK);0,5;blu scuro;-> D2
 330;X3:6;LC1-TX:+24;+24 V emettitore;0,5;blu scuro;via W20
 331;X4:4;LC1-TX:0V;0V24;0,5;blu/bianco;via W20
 332;X3:7;LC1-RX:+24;+24 V ricevitore;0,5;blu scuro;via W21
@@ -96,28 +101,32 @@ PE9;BPE;staffa schermi;PE schermi;2,5;giallo-verde;schermi cavi a terra solo lat
 381;X4:12;U9:-Vin;0V24 DC/DC;0,5;blu/bianco;
 382;U9:+Vout;U8:JD-VCC;+5 V bobine rele;0,5;rosso;togliere ponticello JD-VCC/VCC
 383;U9:-Vout;U8:GND(JD);0 V bobine rele;0,5;nero;
-400;A1:5V;X7:1;+5 V logica;0,5;rosso;ponticello X7:1-4
+400;A1:5V;X7:1;+5 V logica;0,5;rosso;ponticello X7:1-8
 401;A1:GND;X6:1;GND logica;0,5;nero;ponticello X6:1-8
 411;A1:D22;U11:PUL+;X_PUL;0,5;viola;
 412;A1:D23;U11:DIR+;X_DIR;0,5;viola;
 413;A1:D24;U11:ENA+;X_ENA (ALTO=disabilitato);0,5;viola;
 414;U11:ALM+;A1:D25;X_ALM (BASSO=allarme);0,5;grigio;INPUT_PULLUP
 415;X6:2;U11:PUL-;GND logica X;0,5;nero;ponticelli PUL-/DIR-/ENA-/ALM- sul driver
+416;X7:5;R1:1;+5 V pull-up X_ENA;0,5;rosso;R1 680 Ohm 0,25 W, R1:2 su U11:ENA+ (puntale doppio con filo 413)
 421;A1:D26;U12:PUL+;Z1_PUL;0,5;viola;
 422;A1:D27;U12:DIR+;Z1_DIR;0,5;viola;
 423;A1:D28;U12:ENA+;Z1_ENA (ALTO=disabilitato);0,5;viola;
 424;U12:ALM+;A1:D29;Z1_ALM (BASSO=allarme);0,5;grigio;INPUT_PULLUP
 425;X6:3;U12:PUL-;GND logica Z1;0,5;nero;ponticelli PUL-/DIR-/ENA-/ALM- sul driver
+426;X7:6;R2:1;+5 V pull-up Z1_ENA;0,5;rosso;R2 680 Ohm 0,25 W, R2:2 su U12:ENA+ (puntale doppio con filo 423)
 431;A1:D30;U13:PUL+;Z2_PUL;0,5;viola;
 432;A1:D31;U13:DIR+;Z2_DIR;0,5;viola;
 433;A1:D32;U13:ENA+;Z2_ENA (ALTO=disabilitato);0,5;viola;
 434;U13:ALM+;A1:D33;Z2_ALM (BASSO=allarme);0,5;grigio;INPUT_PULLUP
 435;X6:4;U13:PUL-;GND logica Z2;0,5;nero;ponticelli PUL-/DIR-/ENA-/ALM- sul driver
+436;X7:7;R3:1;+5 V pull-up Z2_ENA;0,5;rosso;R3 680 Ohm 0,25 W, R3:2 su U13:ENA+ (puntale doppio con filo 433)
 441;A1:D34;U14:PUL+;R_PUL;0,5;viola;
 442;A1:D35;U14:DIR+;R_DIR;0,5;viola;
 443;A1:D36;U14:ENA+;R_ENA (ALTO=disabilitato);0,5;viola;
 444;U14:ALM+;A1:D37;R_ALM (BASSO=allarme);0,5;grigio;INPUT_PULLUP
 445;X6:5;U14:PUL-;GND logica R;0,5;nero;ponticelli PUL-/DIR-/ENA-/ALM- sul driver
+446;X7:8;R4:1;+5 V pull-up R_ENA;0,5;rosso;R4 680 Ohm 0,25 W, R4:2 su U14:ENA+ (puntale doppio con filo 443)
 501;U6:OUT1;A1:D38;X_MIN;0,5;grigio;BASSO = attivo
 502;U6:OUT2;A1:D39;X_MAX;0,5;grigio;BASSO = attivo
 503;U6:OUT3;A1:D40;Z1_HOME;0,5;grigio;BASSO = attivo

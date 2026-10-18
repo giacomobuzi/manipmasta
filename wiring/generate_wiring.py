@@ -131,12 +131,14 @@ def build_wires():
     w(9, "X1:3", "F3:1", "L PSU3", "1,5", "marrone", "")
     w(10, "F1:2", "KM1:1", "L PSU1", "1,5", "marrone", "")
     w(11, "X1:4", "KM1:3", "N PSU1", "1,5", "blu chiaro", "")
-    w(12, "KM1:2", "PSU1:L", "L PSU1 sotto sicurezza", "1,5", "marrone", "")
-    w(13, "KM1:4", "PSU1:N", "N PSU1 sotto sicurezza", "1,5", "blu chiaro", "")
+    w(12, "KM1:2", "KM2:1", "L PSU1 serie KM1-KM2", "1,5", "marrone", "")
+    w(13, "KM1:4", "KM2:3", "N PSU1 serie KM1-KM2", "1,5", "blu chiaro", "")
     w(14, "F2:2", "PSU2:L", "L PSU2", "1,5", "marrone", "")
     w(15, "X1:5", "PSU2:N", "N PSU2", "1,5", "blu chiaro", "")
     w(16, "F3:2", "PSU3:L", "L PSU3", "1,5", "marrone", "")
     w(17, "X1:6", "PSU3:N", "N PSU3", "1,5", "blu chiaro", "")
+    w(18, "KM2:2", "PSU1:L", "L PSU1 sotto sicurezza", "1,5", "marrone", "")
+    w(19, "KM2:4", "PSU1:N", "N PSU1 sotto sicurezza", "1,5", "blu chiaro", "")
     # PE
     w("PE1", "X0:PE", "BPE", "PE rete", "2,5", "giallo-verde", "")
     w("PE2", "BPE", "PSU1:FG", "PE", "1,5", "giallo-verde", "PSU2/PSU3 HDR in classe II: senza FG")
@@ -160,7 +162,7 @@ def build_wires():
     # 24 V
     w(301, "PSU2:+V", "F4:1", "+24 V", "1,0", "blu scuro", "")
     w(302, "PSU2:+V", "F5:1", "+24 V", "1,0", "blu scuro", "")
-    w(303, "PSU2:-V", "X4:1", "0V24", "1,0", "blu/bianco", "ponticello X4:1-12")
+    w(303, "PSU2:-V", "X4:1", "0V24", "1,0", "blu/bianco", "ponticello X4:1-13")
     w(304, "F4:2", "X3:1", "+24 V S (sicurezza)", "1,0", "blu scuro", "ponticello X3:1-4")
     w(305, "F5:2", "X3:5", "+24 V I/O", "1,0", "blu scuro", "ponticello X3:5-13")
     # Sicurezza
@@ -172,13 +174,16 @@ def build_wires():
     w(315, "S0:22", "K1:S22", "emergenza canale 2", "0,5", "blu scuro", "")
     w(316, "K1:S33", "S1:13", "reset", "0,5", "blu scuro", "")
     w(317, "S1:14", "KM1:21", "reset + retroazione", "0,5", "blu scuro", "")
-    w(318, "KM1:22", "K1:S34", "retroazione KM1 (NC)", "0,5", "blu scuro", "")
-    w(319, "X3:3", "K1:13", "+24 V S", "0,75", "blu scuro", "")
-    w(320, "K1:14", "K1:23", "serie contatti sicuri", "0,75", "blu scuro", "")
-    w(321, "K1:24", "KM1:A1", "comando bobina KM1", "0,75", "blu scuro", "soppressore su bobina")
-    w(322, "KM1:A2", "X4:3", "0V24", "0,75", "blu/bianco", "")
-    w(323, "X3:4", "K1:43", "+24 V S", "0,5", "blu scuro", "")
-    w(324, "K1:44", "U7:IN1", "ESTOP_OK (24 V = OK)", "0,5", "blu scuro", "-> D2")
+    w(318, "KM1:22", "KM2:21", "retroazione KM1-KM2 (NC in serie)", "0,5", "blu scuro", "")
+    w(319, "KM2:22", "K1:S34", "retroazione KM2 (NC)", "0,5", "blu scuro", "")
+    w(320, "X3:3", "K1:13", "+24 V S", "0,75", "blu scuro", "")
+    w(321, "K1:13", "K1:23", "+24 V S ai 2 canali di uscita", "0,75", "blu scuro", "ponticello sul modulo K1")
+    w(322, "K1:14", "KM1:A1", "comando bobina KM1 (canale 1)", "0,75", "blu scuro", "soppressore su bobina")
+    w(323, "KM1:A2", "X4:3", "0V24", "0,75", "blu/bianco", "")
+    w(324, "K1:24", "KM2:A1", "comando bobina KM2 (canale 2)", "0,75", "blu scuro", "soppressore su bobina")
+    w(325, "KM2:A2", "X4:13", "0V24", "0,75", "blu/bianco", "")
+    w(326, "X3:4", "K1:43", "+24 V S", "0,5", "blu scuro", "")
+    w(327, "K1:44", "U7:IN1", "ESTOP_OK (24 V = OK)", "0,5", "blu scuro", "-> D2")
     w(330, "X3:6", "LC1-TX:+24", "+24 V emettitore", "0,5", "blu scuro", "via W20")
     w(331, "X4:4", "LC1-TX:0V", "0V24", "0,5", "blu/bianco", "via W20")
     w(332, "X3:7", "LC1-RX:+24", "+24 V ricevitore", "0,5", "blu scuro", "via W21")
@@ -209,7 +214,7 @@ def build_wires():
     w(382, "U9:+Vout", "U8:JD-VCC", "+5 V bobine rele", "0,5", "rosso", "togliere ponticello JD-VCC/VCC")
     w(383, "U9:-Vout", "U8:GND(JD)", "0 V bobine rele", "0,5", "nero", "")
     # Logica 5 V
-    w(400, "A1:5V", "X7:1", "+5 V logica", "0,5", "rosso", "ponticello X7:1-4")
+    w(400, "A1:5V", "X7:1", "+5 V logica", "0,5", "rosso", "ponticello X7:1-8")
     w(401, "A1:GND", "X6:1", "GND logica", "0,5", "nero", "ponticello X6:1-8")
     for a in AXES:
         b = a["wn"]
@@ -219,6 +224,9 @@ def build_wires():
         w(b + 4, f"{a['u']}:ALM+", f"A1:D{a['alm']}", f"{a['ax']}_ALM (BASSO=allarme)", "0,5", "grigio", "INPUT_PULLUP")
         w(b + 5, a["gnd"], f"{a['u']}:PUL-", f"GND logica {a['ax']}", "0,5", "nero",
           "ponticelli PUL-/DIR-/ENA-/ALM- sul driver")
+        n = AXES.index(a) + 1
+        w(b + 6, f"X7:{4 + n}", f"R{n}:1", f"+5 V pull-up {a['ax']}_ENA", "0,5", "rosso",
+          f"R{n} 680 Ohm 0,25 W, R{n}:2 su {a['u']}:ENA+ (puntale doppio con filo {b + 3})")
     for i, s in enumerate(SENSORS):
         w(501 + i, f"U6:OUT{i + 1}", f"A1:D{s[2]}", s[1], "0,5", "grigio", "BASSO = attivo")
     w(509, "X7:2", "U6:VCC", "+5 V", "0,5", "rosso", "")
@@ -500,7 +508,7 @@ class Sheet:
 # --------------------------------------------------------------------------------------
 def sheet_e01(pdf):
     s = Sheet(1, "Alimentazione e potenza", "230 V AC, PSU 48/24/12 V, protezioni, distribuzione 48 V, terra PE")
-    s.heading("E01 - Potenza", "Rete 230 V 1~ -> Q1 -> Q2 -> X1 -> F1/F2/F3 -> PSU1 (via KM1) / PSU2 / PSU3")
+    s.heading("E01 - Potenza", "Rete 230 V 1~ -> Q1 -> Q2 -> X1 -> F1/F2/F3 -> PSU1 (via KM1 + KM2 in serie) / PSU2 / PSU3")
     yL, yN = 262, 252
     # ingresso
     s.text(21, 270, "W0  rete 230 V 50 Hz  H07RN-F 3G1,5\nspina CEE 16 A 2P+T", fs=5, ha="left")
@@ -558,8 +566,15 @@ def sheet_e01(pdf):
         if xl != 330:
             s.dot(xl, yL, c=COL["L"])
         s.dot(xn, yN, c=COL["N"]) if xn != 340 else None
-        s.vhop(xl, 168, yL, hops=[yN], c=COL["L"])
-        s.line([(xn, 168), (xn, yN)], c=COL["N"])
+        if name == "PSU1":  # interruzioni in corrispondenza dei contatti KM1 / KM2
+            s.vhop(xl, 215, yL, hops=[yN], c=COL["L"])
+            s.line([(xn, 215), (xn, yN)], c=COL["N"])
+            for xx, cc in ((xl, COL["L"]), (xn, COL["N"])):
+                s.line([(xx, 209), (xx, 191)], c=cc)
+                s.line([(xx, 185), (xx, 168)], c=cc)
+        else:
+            s.vhop(xl, 168, yL, hops=[yN], c=COL["L"])
+            s.line([(xn, 168), (xn, yN)], c=COL["N"])
         s.term(xl, 245)
         s.term(xn, 245)
         s.text(xl - 1.5, 245, f"X1:{t1}", fs=4.5, ha="right")
@@ -570,20 +585,24 @@ def sheet_e01(pdf):
         s.wn(xl, 239.2, w[0])
         s.wn(xl, 224, w[1])
         s.wn(xn, 224 if name != "PSU1" else 229, w[3])
-    # KM1 sul ramo PSU1
-    s.sym("no", 130, 212, "v")
-    s.sym("no", 140, 212, "v")
-    s.line([(129.0, 212.2), (141, 212.2)], ls=(0, (1.5, 1)), lw=0.6)
-    s.line([(141, 212.2), (146, 212.2)], ls=(0, (1.5, 1)), lw=0.6)
-    s.text(147, 214.5, "KM1  contattore AC-3 >= 9 A", fs=5.2, ha="left", w="bold")
-    s.text(147, 210.3, "bobina 24 V DC comandata da K1 (E02)\nsenza consenso sicurezza PSU1 spenta", fs=4.6,
-           ha="left", va="top")
-    s.text(128.3, 216.6, "1", fs=4)
-    s.text(128.3, 207.4, "2", fs=4)
-    s.text(138.3, 216.6, "3", fs=4)
-    s.text(138.3, 207.4, "4", fs=4)
-    s.wn(130, 201, 12)
-    s.wn(140, 201, 13)
+    # KM1 + KM2 in serie sul ramo PSU1
+    for yk, km, d in ((212, "KM1", "bobina 24 V DC da K1 13-14 (canale 1, E02)"),
+                      (188, "KM2", "bobina 24 V DC da K1 23-24 (canale 2, E02)")):
+        s.sym("no", 130, yk, "v")
+        s.sym("no", 140, yk, "v")
+        s.line([(129.0, yk + 0.2), (146, yk + 0.2)], ls=(0, (1.5, 1)), lw=0.6)
+        s.text(147, yk + 2.5, f"{km}  contattore AC-3 >= 9 A", fs=5.2, ha="left", w="bold")
+        s.text(147, yk - 1.7, d, fs=4.6, ha="left", va="top")
+        s.text(128.3, yk + 4.6, "1", fs=4)
+        s.text(128.3, yk - 4.6, "2", fs=4)
+        s.text(138.3, yk + 4.6, "3", fs=4)
+        s.text(138.3, yk - 4.6, "4", fs=4)
+    s.text(147, 182.6, "contatti in serie su L e N: PSU1 spenta se anche uno solo apre (ridondanza cat. 3)",
+           fs=4.4, ha="left", va="top", style="italic", c="#444")
+    s.wn(130, 200, 12)
+    s.wn(140, 200, 13)
+    s.wn(130, 177, 18)
+    s.wn(140, 177, 19)
     # PSU boxes
     s.rect(120, 168 - 25, 85, 25, lw=0.9)
     s.text(162.5, 160, "PSU1  Mean Well SDR-480-48", fs=6, w="bold")
@@ -723,7 +742,7 @@ def sheet_e01(pdf):
                         ], w=90)
     s.notes(300, 79, 108, [
         "Fusibili driver F11-F14: 5 A ritardati (T), uno per driver, sul +48 V.",
-        "PSU1 alimentata solo con KM1 chiuso (catena di emergenza OK, E02).",
+        "PSU1 alimentata solo con KM1 e KM2 chiusi (catena di emergenza OK, E02).",
         "0V48 e 0V24 collegati a PE in un solo punto (PELV), ponti rimovibili.",
         "Telaio portale e carcasse motori a PE tramite XP1 + W9 (1x2,5).",
         "Taratura F1-F3 indicativa: verificare spunto PSU (curva gG/aM).",
@@ -736,9 +755,9 @@ def sheet_e01(pdf):
 # E02 - SICUREZZA
 # --------------------------------------------------------------------------------------
 def sheet_e02(pdf):
-    s = Sheet(2, "Circuito di sicurezza", "Emergenza 2NC, relè di sicurezza K1, KM1 con retroazione, barriera LC1")
+    s = Sheet(2, "Circuito di sicurezza", "Emergenza 2NC, relè di sicurezza K1, KM1 + KM2 in serie con retroazione, barriera LC1")
     s.heading("E02 - Sicurezza",
-              "Emergenza e barriera: arresto cat. 0 per apertura di KM1 (48 V ai driver) + segnalazione all'Arduino (D2, D3)")
+              "Emergenza e barriera: arresto cat. 0 per apertura di KM1 + KM2 in serie (48 V ai driver) + segnalazione all'Arduino (D2, D3)")
     yT, yB = 262, 62
     # binari
     s.line([(25, yT), (258, yT)], c=COL["P24"], lw=1.1)
@@ -756,7 +775,7 @@ def sheet_e02(pdf):
            fs=4.7)
     s.text(114.5, 148.5, "es. Pilz PNOZ X2.8P, Schmersal SRB 301MC o equivalente 24 V DC  -  verificare morsetti sul manuale",
            fs=4.5, style="italic", c="#444")
-    tops = [("A1", 42), ("S11", 62), ("S12", 84), ("S21", 104), ("S22", 126), ("S33", 146), ("S34", 188)]
+    tops = [("A1", 42), ("S11", 62), ("S12", 84), ("S21", 104), ("S22", 126), ("S33", 146), ("S34", 190)]
     for lab, x in tops:
         s.term(x, 176)
         s.text(x + 1.2, 173.4, lab, fs=4.6, ha="left")
@@ -789,67 +808,77 @@ def sheet_e02(pdf):
     s.line([(115.35, yl + 3.4), (115.35, yl - 0.85)], ls=(0, (1.5, 1)), lw=0.6)
     s.text(56, 227, "S0  fungo di emergenza 2NC, a ritenuta (porta quadro)", fs=5.4, ha="left", w="bold")
     s.text(56, 222.8, "canale 1: 11-12   canale 2: 21-22", fs=4.6, ha="left")
-    # reset loop
-    s.line([(146, 176.65), (146, yl), (154, yl)], c=COL["P24"])
-    s.sym("pb_no", 157, yl, "h")
-    s.line([(160, yl), (169, yl)], c=COL["P24"])
-    s.sym("nc", 172, yl, "h")
-    s.line([(175, yl), (188, yl), (188, 176.65)], c=COL["P24"])
+    # reset loop: S1 (NO) + KM1 21-22 (NC) + KM2 21-22 (NC) in serie su S33-S34
+    s.line([(146, 176.65), (146, yl), (150, yl)], c=COL["P24"])
+    s.sym("pb_no", 153, yl, "h")
+    s.line([(156, yl), (163, yl)], c=COL["P24"])
+    s.sym("nc", 166, yl, "h")
+    s.line([(169, yl), (176, yl)], c=COL["P24"])
+    s.sym("nc", 179, yl, "h")
+    s.line([(182, yl), (190, yl), (190, 176.65)], c=COL["P24"])
     s.wn(146, 194, 316)
-    s.wn(164.5, yl, 317)
-    s.wn(188, 194, 318)
-    s.text(153.8, yl - 2.2, "13", fs=4.2)
-    s.text(160.2, yl - 2.2, "14", fs=4.2)
-    s.text(168.8, yl - 2.2, "21", fs=4.2)
-    s.text(175.2, yl - 2.2, "22", fs=4.2)
-    s.text(150, 222.8, "S1 RESET\n(pulsante blu NO)", fs=4.8, ha="center", va="bottom", w="bold")
-    s.text(176, 222.8, "KM1 21-22\nretroazione NC", fs=4.8, ha="center", va="bottom", w="bold")
-    s.text(167, 201, "reset possibile solo con\nKM1 diseccitato (NC chiuso)", fs=4.4, style="italic", c="#444")
-    # colonna KM1
-    xk = 218
-    s.dot(xk, yT, c=COL["P24"])
-    s.line([(xk, yT), (xk, 243)], c=COL["P24"])
-    s.term(xk, 252)
-    s.text(xk + 1.5, 252, "X3:3", fs=4.5, ha="left")
-    s.sym("no", xk, 240, "v")
-    s.line([(xk, 237), (xk, 218)], c=COL["P24"])
-    s.sym("no", xk, 215, "v")
-    s.line([(xk, 212), (xk, 113)], c=COL["P24"])
-    s.sym("coil", xk, 110, "v")
-    s.line([(xk, 107), (xk, yB)], c=COL["M24"])
-    s.dot(xk, yB, c=COL["M24"])
-    s.wn(xk, 248, 319)
-    s.wn(xk, 228, 320)
-    s.wn(xk, 160, 321)
-    s.wn(xk, 98, 322)
-    s.term(xk, 70)
-    s.text(xk + 1.5, 70, "X4:3", fs=4.5, ha="left")
-    s.text(xk + 2.6, 241.5, "K1", fs=5, ha="left", w="bold")
-    s.text(xk + 2.6, 238, "13-14", fs=4.5, ha="left")
-    s.text(xk + 2.6, 216.5, "K1", fs=5, ha="left", w="bold")
-    s.text(xk + 2.6, 213, "23-24", fs=4.5, ha="left")
-    s.text(xk - 3.6, 112, "KM1", fs=5.5, ha="right", w="bold")
-    s.text(xk - 3.6, 108, "A1-A2 24 V DC", fs=4.4, ha="right")
-    s.text(xk - 3.6, 104.5, "+ soppressore", fs=4.4, ha="right")
-    s.text(xk + 3.5, 101, "1-2  L PSU1 /E01\n3-4  N PSU1 /E01\n21-22 NC /E02", fs=4.3, ha="left", va="top",
+    s.wn(159.5, yl, 317)
+    s.wn(172.5, yl, 318)
+    s.wn(190, 194, 319)
+    for xx, c1, c2 in ((153, "13", "14"), (166, "21", "22"), (179, "21", "22")):
+        s.text(xx - 3.2, yl - 2.2, c1, fs=4.2)
+        s.text(xx + 3.2, yl - 2.2, c2, fs=4.2)
+    s.text(151, 222.8, "S1 RESET\n(blu NO)", fs=4.8, ha="center", va="bottom", w="bold")
+    s.text(166, 222.8, "KM1\n21-22", fs=4.8, ha="center", va="bottom", w="bold")
+    s.text(179, 222.8, "KM2\n21-22", fs=4.8, ha="center", va="bottom", w="bold")
+    s.text(172.5, 230.5, "retroazione NC in serie", fs=4.4, ha="center", c="#444")
+    s.text(168, 201, "reset possibile solo con KM1 e\nKM2 diseccitati (NC chiusi)", fs=4.4, style="italic",
+           c="#444")
+    # uscite di sicurezza: canale 1 13-14 -> KM1, canale 2 23-24 -> KM2 (bobine pilotate dai due canali)
+    xk1, xk2 = 210, 230
+    yc = 86  # quota bobine
+    s.dot(xk1, yT, c=COL["P24"])
+    s.line([(xk1, yT), (xk1, 255.65)], c=COL["P24"])
+    s.term(xk1, 255)
+    s.text(xk1 - 1.5, 255, "X3:3", fs=4.5, ha="right")
+    s.line([(xk1, 254.35), (xk1, 243)], c=COL["P24"])
+    s.wn(xk1, 250.6, 320)
+    s.dot(xk1, 246.5, c=COL["P24"])
+    s.line([(xk1, 246.5), (xk2, 246.5), (xk2, 243)], c=COL["P24"])
+    s.wn((xk1 + xk2) / 2, 246.5, 321)
+    for xk, km, nc, n_on, n_ret, x4, ch in ((xk1, "KM1", "13-14", 322, 323, "X4:3", "canale 1"),
+                                             (xk2, "KM2", "23-24", 324, 325, "X4:13", "canale 2")):
+        s.sym("no", xk, 240, "v")
+        s.text(xk + 2.6, 241.5, "K1", fs=5, ha="left", w="bold")
+        s.text(xk + 2.6, 238, nc, fs=4.5, ha="left")
+        s.line([(xk, 237), (xk, yc + 3)], c=COL["P24"])
+        s.sym("coil", xk, yc, "v")
+        s.line([(xk, yc - 3), (xk, yB)], c=COL["M24"])
+        s.dot(xk, yB, c=COL["M24"])
+        s.wn(xk, 160, n_on)
+        s.wn(xk, 78, n_ret)
+        s.term(xk, 70)
+        s.text(xk + 1.5, 70, x4, fs=4.5, ha="left")
+    s.text(xk1 - 3.6, yc + 2.2, "KM1", fs=5.5, ha="right", w="bold")
+    s.text(xk1 - 3.6, yc - 1.6, "A1-A2 24 V DC\n+ soppressore", fs=4.4, ha="right", va="top")
+    s.text(xk1 - 3.6, yc - 8.6, "1-2 L, 3-4 N  /E01\n21-22 NC  /E02", fs=4.2, ha="right", va="top",
+           family="DejaVu Sans Mono")
+    s.text(xk2 + 3.6, yc + 2.2, "KM2", fs=5.5, ha="left", w="bold")
+    s.text(xk2 + 3.6, yc - 1.6, "A1-A2 24 V DC\n+ soppressore", fs=4.4, ha="left", va="top")
+    s.text(xk2 + 3.6, yc - 8.6, "1-2 L, 3-4 N  /E01\n21-22 NC  /E02", fs=4.2, ha="left", va="top",
            family="DejaVu Sans Mono")
     # colonna K1 43-44 -> U7 IN1
-    xa = 245
+    xa = 256
     s.dot(xa, yT, c=COL["P24"])
     s.line([(xa, yT), (xa, 243)], c=COL["P24"])
     s.term(xa, 252)
     s.text(xa + 1.5, 252, "X3:4", fs=4.5, ha="left")
     s.sym("no", xa, 240, "v")
     s.line([(xa, 237), (xa, 132)], c=COL["P24"])
-    s.wn(xa, 248, 323)
-    s.wn(xa, 190, 324)
+    s.wn(xa, 248, 326)
+    s.wn(xa, 190, 327)
     s.text(xa + 2.6, 241.5, "K1", fs=5, ha="left", w="bold")
     s.text(xa + 2.6, 238, "43-44", fs=4.5, ha="left")
-    s.rect(236, 116, 26, 16, lw=0.8)
+    s.rect(xa - 11, 116, 23, 16, lw=0.8)
     s.term(xa, 132)
-    s.text(249, 127.5, "U7:IN1", fs=5, w="bold")
-    s.text(249, 123.2, "-> D2 ESTOP_OK", fs=4.5)
-    s.text(249, 119.4, "(vedi E04)", fs=4.3, c="#444")
+    s.text(xa + 0.5, 127.5, "U7:IN1", fs=5, w="bold")
+    s.text(xa + 0.5, 123.2, "-> D2 ESTOP_OK", fs=4.3)
+    s.text(xa + 0.5, 119.4, "(vedi E04)", fs=4.3, c="#444")
     # barriera
     xt = 282
     s.dot(xt, yT, c=COL["P24"])
@@ -921,15 +950,15 @@ def sheet_e02(pdf):
     s.text(385, 119.4, "(vedi E04)", fs=4.3, c="#444")
     # note
     s.notes(50, 134, 156, [
-        "Funzionamento: S0 e LC1 indipendenti. Con S0 rilasciato e KM1 diseccitato, premendo S1 K1 si arma:",
-        "13-14 e 23-24 chiudono -> KM1 eccitato -> 230 V a PSU1 -> 48 V ai driver. 43-44 chiude -> D2 BASSO.",
-        "Premendo S0: K1 apre -> KM1 cade -> driver senza potenza (arresto cat. 0) -> D2 ALTO (ESTOP).",
+        "Funzionamento: S0 e LC1 indipendenti. Con S0 rilasciato e KM1/KM2 diseccitati (NC 21-22 chiusi),",
+        "premendo S1 K1 si arma: 13-14 eccita KM1, 23-24 eccita KM2 -> 230 V a PSU1 -> 48 V ai driver.",
+        "43-44 chiude -> D2 BASSO. Premendo S0: K1 apre -> KM1 e KM2 cadono -> driver senza potenza",
+        "(arresto cat. 0) -> D2 ALTO (ESTOP). Contatti di potenza KM1/KM2 in serie su L e N (E01): un",
+        "contattore incollato non impedisce l'arresto; il suo NC aperto blocca il reset successivo.",
         "Z1/Z2 a vite trapezia autobloccante: il rullo non scende senza potenza. X si arresta per attrito.",
-        "LC1 (come da SPEC) agisce SOLO via firmware (D3): non è una funzione di sicurezza cablata.",
-        "Per PL d reale: portare OSSD1/OSSD2 in un secondo modulo di sicurezza (o K1 a 2 ingressi",
-        "di tipo OSSD) che agisce su KM1, e raddoppiare KM1 con KM2 in serie (contatti a specchio",
-        "in serie nel loop di retroazione S33-S34). Valutazione rischi e PL a cura del progettista",
-        "della macchina (Direttiva Macchine / Reg. UE 2023/1230, EN ISO 13849-1, CEI EN 60204-1).",
+        "LC1 (come da SPEC) agisce SOLO via firmware (D3): non è una funzione di sicurezza cablata;",
+        "per renderla tale portare OSSD1/OSSD2 su un secondo modulo di sicurezza che apra KM1/KM2.",
+        "Valutazione rischi e PL a cura del progettista (Reg. UE 2023/1230, EN ISO 13849-1, CEI EN 60204-1).",
         "Contatti disegnati a riposo, circuito non alimentato. Numeri in riquadro = n. filo.",
     ], title="Note E02 - logica di sicurezza", fs=4.9, lh=3.05)
     s.save(pdf)
@@ -942,7 +971,7 @@ def sheet_e03(pdf):
     s = Sheet(3, "Arduino Mega e driver CL57T", "Step/Dir/Enable/Alarm a catodo comune 5 V, fasi motore ed encoder")
     s.heading("E03 - Arduino e driver",
               "Ingressi CL57T optoisolati 5 V a catodo comune: X+ <- pin Arduino, X- -> GND logica (X6). "
-              "ENA: pin ALTO = driver DISABILITATO. ALM: uscita opto -> pin INPUT_PULLUP, BASSO = allarme.")
+              "ENA: pin ALTO = driver DISABILITATO (pull-up R1-R4 680 Ohm). ALM: opto -> pin INPUT_PULLUP, BASSO = allarme.")
     # Arduino
     ax0, ax1 = 25, 85
     s.rect(ax0, 50, ax1 - ax0, 222, lw=1.1)
@@ -998,6 +1027,19 @@ def sheet_e03(pdf):
         s.text(140, ys[0] + 2, a["gnd"], fs=4.4)
         s.wn(118, ys[0], a["wn"] + 5)
         s.text(156.8, ys[2], "ponticelli", fs=3.8, ha="right", c="#555")
+        # pull-up 680 Ohm su ENA+ verso +5 V (driver disabilitati con MCU in reset)
+        ye = yt - 2 * pitch
+        xr0 = 100
+        yr = yt - 5.7 * pitch
+        s.dot(xr0, ye, c=COL["V5"])
+        s.vhop(xr0, yr, ye, hops=[yt - 3 * pitch, ys[0]], c=COL["V5"], lw=0.6)
+        s.line([(xr0, yr), (104, yr)], c=COL["V5"], lw=0.6)
+        s.rect(104, yr - 1.0, 9, 2.0, lw=0.7, z=4)
+        s.line([(113, yr), (129.35, yr)], c=COL["V5"], lw=0.6)
+        s.term(130, yr)
+        s.text(108.5, yr + 2.4, f"R{i + 1} 680", fs=4.0, w="bold")
+        s.wn(122, yr, a["wn"] + 6)
+        s.text(131.5, yr, f"X7:{5 + i} +5 V", fs=4.2, ha="left")
         # alimentazione driver
         for k, (nm, cc, lab) in enumerate((("+Vdc", COL["P48"], f"+48 V da {a['f']} (E01) - filo {207 + i}"),
                                            ("GND", COL["M48"], f"0V48 da X2:{6 + i} (E01) - filo {211 + i}"))):
@@ -1066,7 +1108,10 @@ def sheet_e03(pdf):
     s.text(300, 268.5, "schermi: a PE solo lato quadro (staffa/pressacavo EMC, PE9)", fs=4.3, c="#333")
     # alimentazione arduino
     yb = 58
-    s.text(27, yb + 12, "Alimentazione A1:", fs=4.8, ha="left", w="bold")
+    s.text(27, yb + 18.5, "ENA+: pull-up R1-R4 680 Ohm -> +5 V (~7 mA)", fs=4.4, ha="left", c=COL["V5"])
+    s.text(27, yb + 15.3, "verificare corrente min. ingresso ENA sul manuale del driver", fs=3.6, ha="left",
+           c=COL["V5"])
+    s.text(27, yb + 11.8, "Alimentazione A1:", fs=4.8, ha="left", w="bold")
     s.text(27, yb + 8, "Vin (jack) <- PSU3 +12 V (701)", fs=4.4, ha="left")
     s.text(27, yb + 4.6, "GND <- PSU3 -V (702)", fs=4.4, ha="left")
     s.text(27, yb + 1.2, "5V -> X7:1 (400)  GND -> X6:1 (401)", fs=4.4, ha="left")
@@ -1158,7 +1203,7 @@ def sheet_e04(pdf):
     u7top, u7bot = 134, 88
     s.rect(u6x0, u7bot, u6x1 - u6x0, u7top - u7bot, lw=1.0)
     s.text(171, (u7top + u7bot) / 2, "U7  optoisolata\n8 can. (4 usati)", fs=5, w="bold")
-    src = [("K1:44  (E02, filo 324)", None), ("K3:14  (E02, filo 340)", None)]
+    src = [("K1:44  (E02, filo 327)", None), ("K3:14  (E02, filo 340)", None)]
     for i, (ch, sig, pin, srcd) in enumerate(U7_INPUTS):
         y = r7[i]
         s.term(u6x0, y)
@@ -1304,159 +1349,219 @@ def sheet_e04(pdf):
 # E05 - LAYOUT QUADRO E CONNETTORI
 # --------------------------------------------------------------------------------------
 def sheet_e05(pdf):
-    s = Sheet(5, "Disposizione quadro e connettori", "Cassetta inox 400x300x200 (scala 1:2), Harting XP1/XP2, collegamento portale")
-    s.heading("E05 - Disposizione quadro (indicativa)",
-              "Viste in scala 1:2 (quote in mm reali). Ingombri da verificare sui componenti acquistati.")
+    s = Sheet(5, "Disposizione quadro e connettori",
+              "Cassetta inox IP65 500x400x250, ventilazione filtrata IP54, Harting XP1/XP2, collegamento portale")
+    s.text(20, 281.5, "E05 - Disposizione quadro (indicativa)", fs=10, ha="left", w="bold")
+    s.text(130, 281.5, "Cassetta 500 (L) x 400 (H) x 250 (P). Quote in mm reali, coerenti con il layout 3D; "
+           "ingombri da verificare sui componenti acquistati.", fs=5.8, ha="left", c="#333")
+
+    # ================= VISTA A - piastra di fondo, scala 1:2 =================
     k = 0.5
-    # ---- vista A: piastra di fondo ----
-    X0, Y0 = 20, 118
-    s.text(X0, Y0 + 150 + 5.5, "VISTA A - piastra di fondo (porta rimossa) - cassetta 400 x 300 x 200, scala 1:2", fs=6, ha="left", w="bold")
-    s.rect(X0, Y0, 400 * k, 300 * k, lw=1.2, fc="#F5F5F5")
-    s.rect(X0 + 10 * k, Y0 + 10 * k, 380 * k, 280 * k, lw=0.5, fc="white")
+    X0, Y0 = 22, 72
 
-    def R(x, y, w, h, lab, fc="#E3F2FD", fs=4.0, rot=0):
-        s.rect(X0 + x * k, Y0 + y * k, w * k, h * k, lw=0.6, fc=fc, z=3)
-        s.text(X0 + (x + w / 2) * k, Y0 + (y + h / 2) * k, lab, fs=fs, rot=rot, z=6)
+    def P(u, v):  # u -250..250, v 0..400 -> foglio
+        return X0 + (u + 250) * k, Y0 + v * k
 
-    # canaline
-    for yy in (262, 147):
-        s.rect(X0 + 20 * k, Y0 + yy * k, 360 * k, 20 * k, lw=0.4, fc="#EEEEEE", ls=(0, (2, 1)), z=2)
-    s.text(X0 + 200 * k, Y0 + 272 * k, "canalina 40x20 (forata)", fs=3.8, c="#666", z=4)
-    s.text(X0 + 200 * k, Y0 + 157 * k, "canalina 40x20 - separare potenza / segnali", fs=3.8, c="#666", z=4)
-    s.rect(X0 + 15 * k, Y0 + 20 * k, 4 * k, 125 * k, lw=0.3, fc="#EEEEEE", z=2)
-    # guida DIN 1
-    s.line([(X0 + 20 * k, Y0 + 215 * k), (X0 + 380 * k, Y0 + 215 * k)], lw=1.4, c="#9E9E9E")
-    x = 22
-    row1 = [("X0", 21, "#FFF9C4"), ("Q1", 36, "#FFCDD2"), ("Q2", 36, "#FFCDD2"), ("F1", 17.5, "#FFE0B2"),
-            ("F2", 17.5, "#FFE0B2"), ("F3", 17.5, "#FFE0B2"), ("KM1", 45, "#FFCDD2"), ("K1", 22.5, "#C8E6C9"),
-            ("K2", 6.2, "#C8E6C9"), ("K3", 6.2, "#C8E6C9"), ("F4", 8.2, "#FFE0B2"), ("F5", 8.2, "#FFE0B2"),
-            ("F11-F14", 32.8, "#FFE0B2"), ("X1", 15.6, "#FFF9C4"), ("X2", 26, "#FFF9C4")]
+    def RA(u0, v0, w, h, lab, fc="#E3F2FD", fs=4.0, rot=0, ls="-"):
+        x, y = P(u0, v0)
+        s.rect(x, y, w * k, h * k, lw=0.6, fc=fc, z=3, ls=ls)
+        s.text(x + w * k / 2, y + h * k / 2, lab, fs=fs, rot=rot, z=6)
+
+    s.text(X0, 275.5, "VISTA A - piastra di fondo (porta aperta) - scala 1:2", fs=6, ha="left", w="bold")
+    s.rect(X0, Y0, 500 * k, 400 * k, lw=1.2, fc="#F5F5F5")
+    x, y = P(-249, 2)
+    s.rect(x, y, 498 * k, 396 * k, lw=0.5, fc="white")
+    # canaline 25 (larghezza vista) x 40 (profondità), quote dal modello 3D
+    for v0 in (362, 222, 20):
+        x, y = P(-230, v0)
+        s.rect(x, y, 460 * k, 25 * k, lw=0.4, fc="#EEEEEE", ls=(0, (2, 1)), z=2)
+    for u0 in (-248, 230):
+        x, y = P(u0, 20)
+        s.rect(x, y, 18 * k, 367 * k, lw=0.4, fc="#EEEEEE", ls=(0, (2, 1)), z=2)
+    s.text(*P(0, 374.5), "canalina 25x40 (v 362-387)", fs=3.6, c="#666", z=4)
+    s.text(*P(0, 234.5), "canalina 25x40 (v 222-247) - separa potenza (sopra) / driver e PSU (sotto)",
+           fs=3.6, c="#666", z=4)
+    s.text(*P(-60, 32.5), "canalina 25x40 (v 20-45) -> XP1/XP2 sul fondo", fs=3.6, c="#666", z=4)
+    s.text(*P(-239, 160), "canalina 18 (u -248...-230)", fs=3.3, rot=90, c="#666", z=4)
+    s.text(*P(239, 160), "canalina 18 (u +230...+248)", fs=3.3, rot=90, c="#666", z=4)
+    # guide DIN
+    for vv in (307, 142):
+        s.line([P(-218, vv), P(218, vv)], lw=1.4, c="#9E9E9E", z=2.5)
+    # fila alta
+    row1 = [("X0", 24, "#FFF9C4"), ("Q1", 36, "#FFCDD2"), ("Q2", 36, "#FFCDD2"), ("F1", 18, "#FFE0B2"),
+            ("F2", 18, "#FFE0B2"), ("F3", 18, "#FFE0B2"), ("KM1", 45, "#FFCDD2"), ("KM2", 45, "#FFCDD2"),
+            ("K1", 22.5, "#C8E6C9"), ("F4", 18, "#FFE0B2"), ("F5", 18, "#FFE0B2"), ("F11", 18, "#FFE0B2"),
+            ("F12", 18, "#FFE0B2"), ("F13", 18, "#FFE0B2"), ("F14", 18, "#FFE0B2"), ("X1", 15, "#FFF9C4"),
+            ("X2", 15, "#FFF9C4")]
+    u = -215
     for lab, w, fc in row1:
-        h = 90 if lab not in ("X0", "X1", "X2", "F4", "F5", "F11-F14", "K2", "K3") else 70
-        rot = 90 if w < 16 else 0
-        R(x, 215 - h / 2, w, h, lab, fc=fc, fs=3.8, rot=rot)
-        x += w + 1.5
-    # barra PE
-    s.rect(X0 + 330 * k, Y0 + 24 * k, 45 * k, 6 * k, lw=0.5, fc=COL["PE"], z=3)
-    s.text(X0 + 352 * k, Y0 + 35 * k, "BPE", fs=4.0, c=COL["PE"], w="bold")
-    # riga 2
-    s.line([(X0 + 20 * k, Y0 + 82 * k), (X0 + 380 * k, Y0 + 82 * k)], lw=1.4, c="#9E9E9E")
-    R(24, 20, 85.5, 125, "PSU1\nSDR-480-48\n85,5x125", fc="#FFCDD2", fs=4.2)
-    for i, a in enumerate(AXES):
-        R(120 + i * 43, 25, 33, 118, f"{a['u']}\nCL57T\n{a['ax']}", fc="#D1C4E9", fs=4.0)
-    R(292, 37, 52.5, 90, "PSU2\nHDR-60-24", fc="#BBDEFB", fs=4.0)
-    R(350, 37, 17.5, 90, "PSU3 HDR-15-12", fc="#BBDEFB", fs=3.8, rot=90)
-    s.text(X0 + 191 * k, Y0 + 15 * k, "driver montati di fianco (dissipatore verticale), distanza >= 10 mm",
-           fs=3.8, c="#444")
+        RA(u, 262, w, 90, lab, fc=fc, fs=4.0, rot=90 if w < 30 else 0)
+        u += w + 2
+    s.text(*P(0, 256), "fila alta: guida DIN v=307, moduli h 90 (v 262-352), passo 2 mm, da u=-215",
+           fs=3.6, c="#444", z=4)
+    # fila bassa
+    RA(-215, 80, 85.5, 125, "PSU1\nSDR-480-48\n85,5x125", fc="#FFCDD2", fs=4.2)
+    for i, (uu, a) in enumerate(zip((-115, -70, -25, 20), AXES)):
+        RA(uu, 85, 34, 118, f"{a['u']}\nCL57T\n{a['ax']}", fc="#D1C4E9", fs=4.0)
+    RA(65, 100, 52.5, 90, "PSU2\nHDR-60-24", fc="#BBDEFB", fs=4.0)
+    RA(125, 100, 17.5, 90, "PSU3 HDR-15-12", fc="#BBDEFB", fs=3.8, rot=90)
+    RA(150, 107, 6.2, 70, "K2", fc="#C8E6C9", fs=3.4, rot=90, ls=(0, (2, 1)))
+    RA(158.2, 107, 6.2, 70, "K3", fc="#C8E6C9", fs=3.4, rot=90, ls=(0, (2, 1)))
+    s.text(*P(192, 142), "K2/K3\nrelè di\ninterfaccia\nbarriera\n(proposta,\nnon nel\nlayout 3D)",
+           fs=3.3, c="#444", z=6)
+    x, y = P(150, 62)
+    s.rect(x, y, 65 * k, 10 * k, lw=0.5, fc=COL["PE"], z=3)
+    s.text(*P(182.5, 77), "BPE", fs=4.0, c=COL["PE"], w="bold", z=6)
+    s.text(*P(-40, 72), "fila bassa (v 80-205): driver con dissipatore verticale, aria dal basso verso l'alto",
+           fs=3.6, c="#444", z=6)
     # quote
+    s.line([(X0, Y0 - 2.5), (X0 + 250, Y0 - 2.5)], lw=0.4)
+    for xx in (X0, X0 + 250):
+        s.line([(xx, Y0 - 3.7), (xx, Y0 - 1.3)], lw=0.4)
+    s.text(X0 + 205, Y0 - 2.5, "500", fs=4.5, bg="white")
+    s.line([(X0 - 3, Y0), (X0 - 3, Y0 + 200)], lw=0.4)
+    for yy in (Y0, Y0 + 200):
+        s.line([(X0 - 4.2, yy), (X0 - 1.8, yy)], lw=0.4)
+    s.text(X0 - 3, Y0 + 100, "400", fs=4.5, rot=90, bg="white")
+    s.text(X0 + 2, Y0 + 2.2, "u=-250", fs=3.4, ha="left", c="#888")
+    s.text(X0 + 248, Y0 + 2.2, "u=+250", fs=3.4, ha="right", c="#888")
 
-    # ---- vista B: parete laterale sinistra ----
-    XB, YB = 236, 118
-    s.text(XB, YB + 150 + 5.5, "VISTA B - parete laterale sx (interno)", fs=6, ha="left", w="bold")
-    s.rect(XB, YB, 200 * k, 300 * k, lw=1.2, fc="#F5F5F5")
-    s.text(XB + 2, YB + 2.5, "lato piastra", fs=3.8, ha="left", c="#666")
-    s.text(XB + 98, YB + 2.5, "lato porta", fs=3.8, ha="right", c="#666")
+    # ================= VISTA B - parete laterale destra (interno), 1:3 =================
+    kb = 1 / 3
+    XB, YB = 282, 136
 
-    def RB(x, y, w, h, lab, fc="#E8F5E9", fs=4.0):
-        s.rect(XB + x * k, YB + y * k, w * k, h * k, lw=0.6, fc=fc, z=3)
-        s.text(XB + (x + w / 2) * k, YB + (y + h / 2) * k, lab, fs=fs, z=6)
+    def RB(d0, v0, w, h, lab, fc="#E8F5E9", fs=3.8, rot=0):
+        s.rect(XB + d0 * kb, YB + v0 * kb, w * kb, h * kb, lw=0.6, fc=fc, z=3)
+        s.text(XB + (d0 + w / 2) * kb, YB + (v0 + h / 2) * kb, lab, fs=fs, rot=rot, z=6)
 
-    for yy in (250, 175, 100, 32):
-        s.line([(XB + 12 * k, YB + yy * k), (XB + 178 * k, YB + yy * k)], lw=1.2, c="#9E9E9E")
-    RB(20, 222, 112, 58, "A1 Arduino Mega\n+ Ethernet Shield 2\nsu supporto DIN", fc="#B2DFDB")
-    RB(14, 150, 74, 50, "U6\nopto 8 can.", fc="#E1BEE7")
-    RB(92, 150, 74, 50, "U7\nopto 8 can.", fc="#E1BEE7")
-    RB(14, 75, 82, 50, "U8 rele 4 can.\nsu supporto DIN", fc="#FFE0B2")
-    RB(100, 75, 26, 50, "U9\nDC/DC", fc="#BBDEFB")
-    RB(130, 75, 42, 50, "X6 X7\n0V/5V\nlogica", fc="#FFF9C4")
-    RB(14, 14, 68, 36, "X3  +24 V\n(13 morsetti)", fc="#FFF9C4")
-    RB(86, 14, 68, 36, "X4  0V24\n(12 morsetti)", fc="#FFF9C4")
-    s.text(XB + 50, YB - 4, "200 (profondità)", fs=4.5)
+    s.text(XB, 275.5, "VISTA B - parete laterale dx (dall'interno) - 1:3", fs=5.5, ha="left", w="bold")
+    s.rect(XB, YB, 250 * kb, 400 * kb, lw=1.2, fc="#F5F5F5")
+    for vv in (316.5, 230, 152.5, 75):
+        s.line([(XB + 15 * kb, YB + vv * kb), (XB + 215 * kb, YB + vv * kb)], lw=1.0, c="#9E9E9E", z=2.5)
+    RB(30, 290, 101, 53, "A1 Arduino Mega\n+ Ethernet Shield 2", fc="#B2DFDB")
+    RB(30, 205, 72, 50, "U6\nopto 8 can.", fc="#E1BEE7")
+    RB(120, 205, 72, 50, "U7\nopto 8 can.", fc="#E1BEE7")
+    RB(30, 125, 75, 55, "U8 relè\n4 can.", fc="#FFE0B2")
+    RB(120, 125, 20, 55, "U9 DC/DC", fc="#BBDEFB", fs=3.4, rot=90)
+    RB(155, 125, 45, 55, "X6 X7\n0V/5V", fc="#FFF9C4", fs=3.6)
+    RB(30, 55, 80, 40, "X3 +24 V\n(13 mors.)", fc="#FFF9C4", fs=3.6)
+    RB(120, 55, 80, 40, "X4 0V24\n(13 mors.)", fc="#FFF9C4", fs=3.6)
+    s.text(XB + 1.5, YB + 2.2, "lato piastra", fs=3.4, ha="left", c="#666")
+    s.text(XB + 250 * kb - 1.5, YB + 2.2, "lato porta", fs=3.4, ha="right", c="#666")
+    s.text(XB + 125 * kb, YB - 2.8, "d = profondità 0-250", fs=4.0)
 
-    # ---- tabella XP1 ----
-    TX, TY = 342, 270
-    s.text(TX, TY + 3.5, "XP1  Han-Modular 24B (motori/encoder)", fs=5.2, ha="left", w="bold")
+    # ================= VISTA F - parete laterale sinistra, 1:8 =================
+    kf = 1 / 8
+    XF, YF = 374, 212
+    s.text(XF, 270, "VISTA F - parete sx\n(dall'esterno) - 1:8", fs=4.6, ha="left", va="top", w="bold")
+    s.rect(XF, YF, 250 * kf, 400 * kf, lw=1.0, fc="#F5F5F5")
+    for vv, lab in ((310, "ventola 120\n+ filtro IN"), (90, "griglia\nOUT")):
+        cx, cy = XF + 125 * kf, YF + vv * kf
+        s.rect(cx - 60 * kf, cy - 60 * kf, 120 * kf, 120 * kf, lw=0.6, fc="#CFD8DC", z=3)
+        for j in range(1, 5):
+            yy = cy - 60 * kf + j * 24 * kf
+            s.line([(cx - 52 * kf, yy), (cx + 52 * kf, yy)], lw=0.3, c="#607D8B", z=4)
+        s.text(cx, cy - 60 * kf - 0.6, lab, fs=3.3, va="top", z=6)
+    s.text(XF + 1, YF - 2, "piastra", fs=3.2, ha="left", c="#666")
+    s.text(XF + 250 * kf - 1, YF - 2, "porta", fs=3.2, ha="right", c="#666")
+
+    # ================= VISTA E - collegamento portale (pianta) =================
+    kp = 1 / 60
+    XE, YE = 372, 152
+    s.text(XE, 196, "VISTA E - portale\n(pianta, 1:60)", fs=4.6, ha="left", va="top", w="bold")
+    tx0, ty0 = XE + 2, YE + 18
+    s.rect(tx0, ty0, 2000 * kp, 800 * kp, lw=0.7, fc="#FAFAFA")
+    s.line([(tx0 + 70 * kp, ty0 + 70 * kp), (tx0 + 1930 * kp, ty0 + 70 * kp)], lw=1.0, c="#607D8B")
+    s.line([(tx0 + 70 * kp, ty0 + 730 * kp), (tx0 + 1930 * kp, ty0 + 730 * kp)], lw=1.0, c="#607D8B")
+    s.rect(tx0 + 300 * kp, ty0 + 10 * kp, 1000 * kp, 40 * kp, lw=0.4, fc="#FFE082")
+    s.rect(tx0 + 120 * kp, ty0 + 120 * kp, 120 * kp, 90 * kp, lw=0.5, fc="#CFD8DC")
+    s.rect(tx0 - 1, ty0 - 9, 8, 6, lw=0.7, fc="#B0BEC5")
+    s.text(tx0 + 3, ty0 - 6, "Q", fs=4.0, w="bold")
+    s.line([(tx0 + 3, ty0 - 3), (tx0 + 3, ty0 + 120 * kp)], lw=0.8, c="#E65100")
+    s.text(tx0 + 9, ty0 - 6, "quadro", fs=3.3, ha="left", c="#333")
+    s.text(XE, YE + 7, "tavolo 2000x800, catena\nportacavi su longherone Y-,\nJB1 sensori; XP1 arancio,\n"
+           "XP2 via JB1", fs=3.3, ha="left", va="top", c="#333")
+
+    # ================= tabella XP1 (4 colonne) =================
+    TX, TY = 280, 124
+    s.text(TX, TY, "XP1  Harting Han-Modular 24B (motori/encoder) - PE sul telaio -> W9 portale", fs=4.8,
+           ha="left", w="bold")
     rows = xp1_pins()
-    ee = [r for r in rows if r[0][0] in "ab"]
-    dd = [r for r in rows if r[0][0] in "cd"]
-    lh = 3.05
-    s.text(TX, TY, "Han EE 8p (a,b) - fasi", fs=4.3, ha="left", w="bold")
-    for i, r in enumerate(ee):
-        s.text(TX, TY - 3.3 - i * lh, f"{r[0]:<3} {r[2]:<8} {r[3]}", fs=3.9, ha="left", family="DejaVu Sans Mono")
-    y2 = TY - 3.3 - len(ee) * lh - 2
-    s.text(TX, y2, "Han DD 12p (c,d) - encoder", fs=4.3, ha="left", w="bold")
-    for i, r in enumerate(dd):
-        s.text(TX, y2 - 3.3 - i * lh, f"{r[0]:<3} {r[2]:<12} {r[3]}", fs=3.9, ha="left",
-               family="DejaVu Sans Mono")
-    y3 = y2 - 3.3 - len(dd) * lh
-    s.text(TX, y3, "PE  telaio Han -> W9 portale", fs=3.9, ha="left", family="DejaVu Sans Mono")
+    cols = [("a - Han EE 8p fasi", [r for r in rows if r[0][0] == "a"]),
+            ("b - Han EE 8p fasi", [r for r in rows if r[0][0] == "b"]),
+            ("c - Han DD 12p encoder", [r for r in rows if r[0][0] == "c"]),
+            ("d - Han DD 12p encoder", [r for r in rows if r[0][0] == "d"])]
+    for j, (hd, rr) in enumerate(cols):
+        cx = TX + j * 32.5
+        s.text(cx, TY - 4, hd, fs=3.7, ha="left", w="bold")
+        for i, r in enumerate(sorted(rr, key=lambda q: int(q[0][1:]))):
+            sig = r[2].replace(" enc", "")
+            s.text(cx, TY - 7.2 - i * 2.75, f"{r[0]:<3} {sig:<7} {r[3]}", fs=3.4, ha="left",
+                   family="DejaVu Sans Mono")
+    # note
+    s.notes(280, 84, 128, [
+        "Ventilazione: ventola 120 mm con filtro IP54 in ingresso in alto",
+        "a sx, griglia filtrata di uscita in basso; dissipazione 40-70 W.",
+        "Potenza 230 V / 48 V nella fila alta e nei driver, logica 5 V",
+        "e I/O 24 V sulla parete dx: incroci a 90 gradi.",
+        "Canaline 25 (vista) x 40 (profondità), verticali larghe 18.",
+        "K2/K3 assenti nel layout 3D: proposti su DIN fila bassa.",
+    ], title="Note E05", fs=4.3, lh=2.7)
 
-    # ---- vista C: fondo cassetta ----
-    XC, YC = 20, 14
-    kc = 0.4
-    s.text(XC, YC + 80 + 2.5, "VISTA C - fondo cassetta (dal basso), passaggi cavi - scala 1:2,5", fs=6, ha="left", w="bold")
-    s.rect(XC, YC, 400 * kc, 200 * kc, lw=1.2, fc="#F5F5F5")
-    s.rect(XC + 40 * kc, YC + 74 * kc, 112 * kc, 52 * kc, lw=0.8, fc="#CFD8DC", z=3)
-    s.text(XC + 96 * kc, YC + 105 * kc, "XP1", fs=5.5, w="bold", z=6)
-    s.text(XC + 96 * kc, YC + 92 * kc, "Han-Modular 24B\nmotori + encoder", fs=3.8, z=6)
-    s.rect(XC + 175 * kc, YC + 78 * kc, 83 * kc, 44 * kc, lw=0.8, fc="#CFD8DC", z=3)
-    s.text(XC + 216 * kc, YC + 105 * kc, "XP2", fs=5.5, w="bold", z=6)
-    s.text(XC + 216 * kc, YC + 92 * kc, "Han 10 E\nsensori", fs=3.8, z=6)
-    glands = [(300, 150, 14, "W0 rete\nM20"), (350, 150, 11, "W20\nLC1-TX M16"), (300, 50, 14, "W23 RJ45\nIP67"),
-              (350, 50, 11, "W21\nLC1-RX M16"), (380, 100, 5, "PE\nest.")]
-    for gx, gy, r, lab in glands:
-        s.ax.add_patch(Circle((XC + gx * kc, YC + gy * kc), r * kc, fc="#CFD8DC", ec="k", lw=0.6, zorder=3))
-        s.text(XC + gx * kc, YC + (gy - r) * kc - 1.0, lab, fs=3.6, va="top", z=6)
-    s.text(XC + 80, YC + 2.5, "lato porta", fs=3.8, c="#666")
-    s.text(XC + 80, YC + 77.5, "lato piastra di fondo", fs=3.8, c="#666")
-    s.text(XC + 120 * kc, YC + 32 * kc, "XP1/XP2: custodie a parete con coperchio;\nlato portale spine volanti "
-           "cablate\nsui cavi (il portale si stacca)", fs=3.9, ha="center", c="#333")
+    # ================= VISTA C - fondo cassetta (dal basso), 1:5 =================
+    kc = 0.2
+    XC, YC = 22, 12
+    s.text(XC, 64.5, "VISTA C - fondo (dal basso) - 1:5", fs=5.5, ha="left", w="bold")
+    s.rect(XC, YC, 500 * kc, 250 * kc, lw=1.2, fc="#F5F5F5")
 
-    # ---- tabella XP2 + avvertenza ----
-    TX2, TY2 = 186, 92
-    s.text(TX2, TY2, "XP2  Han 10 E (sensori)", fs=5.0, ha="left", w="bold")
-    xp2 = [("1", "+24 V (BN)"), ("2", "0V (BU)")] + [(str(x[4]), f"{x[1]} ({x[0]})") for x in SENSORS] + [
+    def PC(u, d):  # dal basso: u verso destra, porta in alto
+        return XC + (u + 250) * kc, YC + d * kc
+
+    for (uc, wd, hd, lab, sub) in ((-125, 90, 43, "XP1", "Han-Mod. 24B"), (-30, 70, 40, "XP2", "Han 10 E")):
+        x, y = PC(uc - wd / 2, 125 - hd / 2)
+        s.rect(x, y, wd * kc, hd * kc, lw=0.7, fc="#CFD8DC", z=3)
+        s.text(x + wd * kc / 2, y + hd * kc / 2 + 1.2, lab, fs=4.6, w="bold", z=6)
+        s.text(x + wd * kc / 2, y + hd * kc / 2 - 2.2, sub, fs=3.2, z=6)
+    glands = [(-210, 125, 10, "W0 rete\nM20"), (60, 125, 7, "W20\nM16"), (100, 125, 7, "W21\nM16"),
+              (175, 125, 13, "W23 RJ45\nIP67"), (60, 205, 4, "PE est.")]
+    for gu, gd, r, lab in glands:
+        cx, cy = PC(gu, gd)
+        s.ax.add_patch(Circle((cx, cy), r * kc, fc="#CFD8DC", ec="k", lw=0.6, zorder=3))
+        if lab == "PE est.":
+            s.text(cx + 1.6, cy, lab, fs=3.2, ha="left", z=6)
+        else:
+            s.text(cx, cy - r * kc - 0.6, lab, fs=3.2, va="top", z=6)
+    s.text(XC + 50, YC + 50 - 2.2, "lato porta", fs=3.4, c="#666")
+    s.text(XC + 50, YC + 2.2, "lato piastra di fondo", fs=3.4, c="#666")
+    s.text(XC + 1.5, YC + 47.5, "u=-250", fs=3.2, ha="left", c="#888")
+    s.text(XC + 98.5, YC + 47.5, "u=+250", fs=3.2, ha="right", c="#888")
+
+    # ================= VISTA D - porta (dall'esterno), 1:8 =================
+    kd = 1 / 8
+    XD, YD = 132, 12
+    s.text(XD, 64.5, "VISTA D - porta (esterno) - 1:8", fs=5.5, ha="left", w="bold")
+    s.rect(XD, YD, 500 * kd, 400 * kd, lw=1.0, fc="#F5F5F5")
+    dev = [(120, 300, "S0", "#D32F2F", 20), (190, 300, "S1", "#1E88E5", 11), (120, 210, "S2", "#43A047", 11),
+           (190, 210, "S3", "#212121", 11)]
+    for du, dv, lab, cc, r in dev:
+        cx, cy = XD + (du + 250) * kd, YD + dv * kd
+        if lab == "S0":
+            s.ax.add_patch(Circle((cx, cy), 30 * kd, fc="#FDD835", ec="k", lw=0.4, zorder=3.5))
+        s.ax.add_patch(Circle((cx, cy), r * kd, fc=cc, ec="k", lw=0.5, zorder=4))
+        s.text(cx, cy - 32 * kd - 0.4, lab, fs=3.4, va="top", z=6)
+    s.rect(XD + 10 * kd, YD + 375 * kd, 30 * kd, 20 * kd, lw=0.5, fc="#FFE082", ls=(0, (2, 1)), z=4)
+    s.text(XD + 6, YD + 400 * kd - 0.9, "H1-H4 sul tetto,\nangolo posteriore sx", fs=3.0, ha="left", va="top",
+           c="#444", z=6)
+    s.text(XD + 2, YD + 9, "S0 fungo emergenza Ø40 (2NC)\nS1 RESET blu - S2 START verde\nS3 STOP (NC)",
+           fs=3.2, ha="left", va="top", c="#333", z=6)
+
+    # ================= tabella XP2 =================
+    TX2, TY2 = 199, 63
+    s.text(TX2, TY2, "XP2  Han 10 E", fs=4.6, ha="left", w="bold")
+    xp2 = [("1", "+24 V (BN)"), ("2", "0V (BU)")] + [(str(x[4]), f"{x[1]}") for x in SENSORS] + [
         ("PE", "telaio JB1")]
     for i, (pn, lab) in enumerate(xp2):
-        s.text(TX2, TY2 - 3.6 - i * 3.0, f"{pn:<3} {lab}", fs=3.9, ha="left", family="DejaVu Sans Mono")
-    s.notes(186, 52, 42, ["Cassetta 400x300 quasi", "satura (~95%) e calore", "interno ~40-70 W:",
-                          "valutare 500x400x250", "o ventilazione IP54", "con filtro."],
-            title="ATTENZIONE", fs=4.2, lh=2.7)
-    # ---- porta ----
-    XD, YD = 236, 52
-    kd = 1 / 7
-    s.text(XD, YD + 300 * kd + 3, "VISTA D - porta (1:7)", fs=5.5, ha="left", w="bold")
-    s.rect(XD, YD, 400 * kd, 300 * kd, lw=1.0, fc="#F5F5F5")
-    dev = [(90, 210, "S0", "#D32F2F", 20), (200, 210, "S1", "#1E88E5", 11), (90, 100, "S2", "#43A047", 11),
-           (200, 100, "S3", "#212121", 11)]
-    for dx, dy, lab, cc, r in dev:
-        s.ax.add_patch(Circle((XD + dx * kd, YD + dy * kd), r * kd * 1.4, fc=cc, ec="k", lw=0.5, zorder=4))
-        s.text(XD + (dx + 32) * kd, YD + dy * kd, lab, fs=4.2, ha="left", z=6)
-    s.text(XD + 340 * kd, YD + 150 * kd, "colonna\nH1-H4\nsul tetto", fs=3.6, z=6)
-    s.text(XD + 30.5, YD - 3, "S0 emergenza (giallo/rosso), S1 reset blu, S2 START verde, S3 STOP nero", fs=3.6,
-           ha="center")
-
-    # ---- schema collegamento portale ----
-    XP, YP = 302, 52
-    s.text(XP, YP + 42, "VISTA E - collegamento al portale (pianta, 1:40)", fs=5.5, ha="left", w="bold")
-    kp = 1 / 40
-    tx0, ty0 = XP + 12, YP + 18
-    s.rect(tx0, ty0, 2000 * kp, 800 * kp, lw=0.8, fc="#FAFAFA")
-    s.text(tx0 + 25, ty0 + 10, "tavolo 2000x800", fs=3.8, c="#666")
-    for ax_, ay_ in ((-930, -330), (930, -330), (-930, 330), (930, 330)):
-        s.rect(tx0 + (1000 + ax_ - 50) * kp, ty0 + (400 + ay_ - 50) * kp, 100 * kp, 100 * kp, lw=0.4, fc="#BDBDBD")
-    s.line([(tx0 + 70 * kp, ty0 + 70 * kp), (tx0 + 1930 * kp, ty0 + 70 * kp)], lw=1.4, c="#607D8B")
-    s.line([(tx0 + 70 * kp, ty0 + 730 * kp), (tx0 + 1930 * kp, ty0 + 730 * kp)], lw=1.4, c="#607D8B")
-    s.rect(tx0 + 300 * kp, ty0 + 10 * kp, 1000 * kp, 40 * kp, lw=0.5, fc="#FFE082")
-    s.text(tx0 + 800 * kp, ty0 - 2.3, "catena portacavi su longherone Y-", fs=3.6, c="#6D4C41")
-    s.rect(tx0 + 120 * kp, ty0 + 120 * kp, 120 * kp, 90 * kp, lw=0.6, fc="#CFD8DC")
-    s.text(tx0 + 185 * kp, ty0 + 260 * kp, "JB1", fs=3.8)
-    s.rect(XP - 2, ty0 + 2, 9, 12, lw=0.8, fc="#B0BEC5")
-    s.text(XP + 2.5, ty0 + 8, "Q", fs=4.5, w="bold")
-    s.line([(XP + 7, ty0 + 6), (tx0 + 120 * kp, ty0 + 6)], lw=0.9, c="#E65100")
-    s.line([(XP + 7, ty0 + 10), (tx0 + 120 * kp, ty0 + 10)], lw=0.9, c="#1A237E")
-    s.text(XP - 1, YP + 13, "quadro: XP1 (arancio) motori/encoder, XP2 (blu) sensori via JB1;\n"
-           "cavi per posa mobile nella catena fino ai carrelli Z1/Z2/R", fs=3.6, ha="left", va="top")
+        s.text(TX2, TY2 - 3.6 - i * 2.8, f"{pn:<3}{lab}", fs=3.4, ha="left", family="DejaVu Sans Mono")
     s.save(pdf)
 
 

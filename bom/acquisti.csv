@@ -3,12 +3,12 @@ M01;Guida supportata SBR20 L=1800;SBR20 albero Ø20 cromato (o inox) con base al
 M02;Pattino aperto SBR20UU;SBR20UU, foratura 4×M6 [verificare interassi];4;12;idem;
 M03;Albero rettificato Ø16 h6 inox L=380;AISI 440C / 304 cromato Ø16 h6;4;18;idem;Guide asse Z
 M04;Supporto albero SK16;SK16 alluminio;8;5;idem;
-M05;Pattino chiuso SC16UU;SC16UU con boccola LM16UU;4;9;idem;
+M05;Pattino chiuso SC16UU;SC16UU con boccola LM16UU;8;9;idem;2 per albero
 M06;Vite trapezia TR16×4 L=420 + chiocciola flangiata;TR16x4 destra, chiocciola bronzo flangiata;2;35;idem;Autobloccante: il rullo non cade a motori spenti
 M07;Supporti vite BK12 + BF12 (coppia);BK12/BF12 con estremità vite lavorata Ø12;2;30;idem;Lavorazione estremità vite: chiedere al fornitore della vite
 M08;Giunto elastico 8→12;giunto a soffietto/oldham Ø25 L30, foro 8 e 12;2;12;idem;Motori Z
 M09;Giunto elastico 8→14;giunto a soffietto Ø32, foro 8 e 14;1;15;idem;Motore X
-M10;Supporto flangiato inox SUCF204;SUCF204 inox foro 20, flangia quadra 4 fori interasse 64;2;38;Ricambi cuscinetti / SKF-NTN rivenditore;Supporti rullo
+M10;Cuscinetto inox S6204-2RS + seeger DIN 471 Ø20;S6204-2RS Ø20×47×14 acciaio inox, schermato;2;22;Ricambi cuscinetti / SKF-NTN rivenditore;Nelle sedi delle slitte Z, chiusi da COP-01
 M11;Supporto flangiato KFL002;KFL002 foro 15 (o inox SFL202);4;9;idem;Albero di sincronismo X
 M12;Puleggia HTD-5M 20T per cinghia 15, foro 15 con cava;HTD 5M 20T b15, foro finito 15H7 + cava 5;2;16;Trasmissioni (es. Mädler, Misumi);Motrici asse X
 M13;Puleggia folle HTD-5M 20T con cuscinetti;rinvio 20T b15 con 2 cuscinetti, perno M8;2;18;idem;Rinvii asse X

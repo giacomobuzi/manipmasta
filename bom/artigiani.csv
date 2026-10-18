@@ -4,17 +4,18 @@ PON-01;Traversa ponte;AISI 304 tubo 40×40×2 L=830 con piastrine M8;1;Carpenter
 SQZ-01;Squadra attacco piastra Z al carrello;AISI 304 angolare 60×60×6 L=260;2;Carpenteria inox (TIG);Tav. 06-07;taglio e foratura M8 accoppiata;35
 CAR-01;Piastra carrello X;AISI 304 sp. 12;2;Taglio laser + officina;Tav. 06 · DXF;laser, foratura e maschiatura, rettifica appoggi pattini;90
 ZPL-01;Piastra Z fissa;AISI 304 sp. 15;2;Taglio laser + officina;Tav. 07 · DXF;laser, maschiatura, fresatura appoggi supporti;120
-ZSL-01;Slitta Z lato Y− con motore R;AISI 304 sp. 12;1;Taglio laser + officina;Tav. 09 · DXF;laser, maschiatura, asole motore;90
-ZSL-02;Slitta Z lato Y+;AISI 304 sp. 12;1;Taglio laser + officina;Tav. 08 · DXF;laser, maschiatura;80
-PIE-01;Piastra piede montante;AISI 304 sp. 10;4;Taglio laser + officina;Tav. 10 · DXF;laser, alesatura Ø20 H7, filetto M12×1 su 2 pezzi;25
-STM-01;Flangia motore NEMA23;AISI 304 sp. 10;4;Taglio laser + officina;Tav. 11 · DXF;laser, foratura;20
-CTP-01;Contropiastra sotto piano;AISI 304 sp. 5;4;Taglio laser;Tav. 12;laser;10
+ZSL-01;Slitta Z lato Y− con motore R;AISI 304 sp. 16;1;Taglio laser + officina;Tav. 09 · DXF;laser, alesatura sede Ø47 H7, maschiatura, asole motore, bandierina saldata;120
+ZSL-02;Slitta Z lato Y+;AISI 304 sp. 16;1;Taglio laser + officina;Tav. 08 · DXF;laser, alesatura sede Ø47 H7, maschiatura, bandierina saldata;110
+COP-01;Coperchio cuscinetto Ø72;AISI 304 sp. 5;2;Taglio laser + tornitore;Tav. 10 · DXF;laser, tornitura contorno e spallamento Ø47;20
+PIE-01;Piastra piede montante;AISI 304 sp. 10;4;Taglio laser + officina;Tav. 11 · DXF;laser, alesatura Ø20 H7, filetto M12×1 su 2 pezzi;25
+STM-01;Flangia motore NEMA23;AISI 304 sp. 10;4;Taglio laser + officina;Tav. 12 · DXF;laser, foratura;20
+CTP-01;Contropiastra sotto piano;AISI 304 sp. 5;4;Taglio laser;Tav. 13;laser;10
 ANC-01;Ancoraggio A1 riferimento;AISI 304 barra quadra 100;1;Tornitore / fresatore;Tav. 03;fresatura, alesatura Ø20 H7, foro Ø8 H8 trasversale, 4×M8;90
 ANC-02;Ancoraggio A2 asola;AISI 304 barra quadra 100;1;Tornitore / fresatore;Tav. 03;fresatura asola 20 H7×26, foro Ø8 H8, 4×M8;100
 ANC-03;Ancoraggio A3/A4 appoggio;AISI 304 barra quadra 100;2;Tornitore / fresatore;Tav. 03;fresatura, foro Ø26, 4×M8;70
 PER-01;Perno di centraggio;AISI 420 temprato (o 304);4;Tornitore;Tav. 04;tornitura Ø20 g6, punta conica, foro Ø8 H8 su 2 pezzi;35
 RUL-01;Rullo di laminazione Ø100;AISI 304 tubo Ø100×3 + testate + perni;1;Tornitore (rettifica);Tav. 05;saldatura testate, tornitura tra le punte, rettifica e lucidatura Ra≤0,8, cava linguetta, equilibratura;380
-ASS-X;Albero di sincronismo;AISI 304 Ø16;1;Tornitore;Tav. 12;tornitura sedi Ø15 k6, 2 cave linguetta, estremità Ø14;70
-DIS-01;Distanziali motore Z 40 mm;AISI 304 Ø12 forato;8;Tornitore;Tav. 12;tornitura;5
-RAS-01;Raschietto rullo;POM-C alimentare sp. 10;2;Fresatura materie plastiche;Tav. 12;fresatura lama 20°, asole;30
+ASS-X;Albero di sincronismo;AISI 304 Ø16;1;Tornitore;Tav. 13;tornitura sedi Ø15 k6, 2 cave linguetta, estremità Ø14;70
+DIS-01;Distanziali motore Z 40 mm;AISI 304 Ø12 forato;8;Tornitore;Tav. 13;tornitura;5
+RAS-01;Raschietto rullo;POM-C alimentare sp. 10;2;Fresatura materie plastiche;Tav. 13;fresatura lama 20°, asole;30
 QE-01;Cablaggio quadro elettrico + collaudo;secondo wiring/schemi_elettrici.pdf;1;Quadrista / elettricista;E01–E05;montaggio, cablaggio, prove CEI EN 60204-1, dichiarazione;600

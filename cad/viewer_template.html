@@ -3,60 +3,92 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: banco di lavoro — vista 3D a tutta altezza, pannello tecnico laterale (sotto su telefono), barra comandi in basso alla vista */
+/* Layout: banco di lavoro — vista 3D a tutta altezza, pannello tecnico laterale con tre modalità (esplora, come funziona, montaggio); su telefono il pannello va sotto */
 :root{
   --bg:#eef1f4; --panel:#f8f9fb; --ink:#1d242c; --muted:#5d6874; --line:#cfd6dd;
-  --accent:#c98a00; --accent-ink:#ffffff; --viewport:#e3e8ed; --chip:#e4e9ee;
+  --accent:#c98a00; --accent-ink:#ffffff; --viewport:#e3e8ed; --chip:#e4e9ee; --label:#1d242c; --label-ink:#ffffff;
   --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
   --f-body:"Barlow",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#13181e; --panel:#1a2028; --ink:#e4e9ee; --muted:#93a0ad; --line:#2c3540;
-  --accent:#f0b429; --accent-ink:#1a1400; --viewport:#161c23; --chip:#232b35; color-scheme:dark}}
+  --accent:#f0b429; --accent-ink:#1a1400; --viewport:#161c23; --chip:#232b35; --label:#f0b429; --label-ink:#1a1400; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#13181e; --panel:#1a2028; --ink:#e4e9ee; --muted:#93a0ad; --line:#2c3540;
-  --accent:#f0b429; --accent-ink:#1a1400; --viewport:#161c23; --chip:#232b35; color-scheme:dark}
+  --accent:#f0b429; --accent-ink:#1a1400; --viewport:#161c23; --chip:#232b35; --label:#f0b429; --label-ink:#1a1400; color-scheme:dark}
+[hidden]{display:none!important}
 html,body{height:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;margin:0}
-.app{display:grid;grid-template-columns:minmax(0,1fr) 340px;height:100%;min-height:520px}
+.app{display:grid;grid-template-columns:minmax(0,1fr) 380px;height:100%;min-height:560px}
 .stage{position:relative;min-width:0;background:var(--viewport);overflow:hidden}
 #c{display:block;width:100%;height:100%;touch-action:none}
+#labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.lbl{position:absolute;transform:translate(-4px,-50%);display:flex;align-items:center;gap:6px;white-space:nowrap}
+.lbl i{width:8px;height:8px;border-radius:50%;background:var(--label);box-shadow:0 0 0 2px var(--viewport)}
+.lbl span{font:600 12px var(--f-body);background:var(--label);color:var(--label-ink);padding:3px 7px;border-radius:4px}
 .head{position:absolute;top:12px;left:max(16px,env(safe-area-inset-left,0px));pointer-events:none}
 .head h1{font-family:var(--f-display);font-weight:700;font-size:30px;letter-spacing:.02em;margin:0;line-height:1;text-transform:uppercase}
 .head p{margin:4px 0 0;color:var(--muted);font-size:13px}
 .views{position:absolute;top:12px;right:16px;display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .btn{font:600 13px var(--f-body);border:1px solid var(--line);background:var(--panel);color:var(--ink);border-radius:6px;padding:8px 12px;min-height:36px;cursor:pointer}
 .btn:hover{border-color:var(--accent)}
-.btn:focus-visible,input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.btn.on{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn:focus-visible,input:focus-visible,.tab:focus-visible,.item:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.btn.on,.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn:disabled{opacity:.4;cursor:default}
 .ctrl{position:absolute;left:12px;right:12px;bottom:12px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr)) auto;gap:10px 16px;align-items:end;
   background:color-mix(in srgb,var(--panel) 92%,transparent);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
 .ctrl label{display:flex;flex-direction:column;gap:4px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);min-width:0}
 .ctrl label b{font:500 13px var(--f-mono);color:var(--ink);letter-spacing:0;text-transform:none}
 input[type=range]{width:100%;accent-color:var(--accent)}
-aside{background:var(--panel);border-left:1px solid var(--line);overflow:auto;padding-block:16px;padding-left:16px;padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:16px}
+aside{background:var(--panel);border-left:1px solid var(--line);overflow:auto;padding-block:0 16px;padding-left:16px;padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:14px}
+.tabs{position:sticky;top:0;background:var(--panel);display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid var(--line);z-index:2;margin-inline:-16px;padding-inline:8px}
+.tab{font:600 15px var(--f-display);letter-spacing:.06em;text-transform:uppercase;background:none;border:0;border-bottom:3px solid transparent;color:var(--muted);padding:14px 4px 11px;cursor:pointer}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--accent)}
 aside h2{font:600 15px var(--f-display);letter-spacing:.1em;text-transform:uppercase;margin:0;color:var(--muted)}
+aside h3{font:700 24px var(--f-display);margin:0;line-height:1.05;text-wrap:balance}
+aside p{margin:0;line-height:1.5;max-width:65ch}
 .sel{border:1px solid var(--line);border-radius:8px;padding:12px;display:flex;flex-direction:column;gap:6px}
 .sel .code{font:500 12px var(--f-mono);color:var(--accent)}
 .sel .nm{font:600 20px var(--f-display);line-height:1.1;text-wrap:balance}
-.sel dl{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:4px 0 0;font-size:13px}
-.sel dt{color:var(--muted)} .sel dd{margin:0;min-width:0}
-.sel .hint{color:var(--muted);font-size:13px}
+dl.kv{display:grid;grid-template-columns:auto 1fr;gap:4px 10px;margin:4px 0 0;font-size:13px}
+dl.kv dt{color:var(--muted)} dl.kv dd{margin:0;min-width:0}
+.hint{color:var(--muted);font-size:13px}
 .grp{display:flex;flex-direction:column;gap:2px}
 .grp-h{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px 0;border-bottom:1px solid var(--line)}
 .grp-h span{font:600 14px var(--f-display);letter-spacing:.08em;text-transform:uppercase}
 .tog{font:500 11px var(--f-mono);background:var(--chip);border:0;color:var(--ink);padding:4px 8px;border-radius:4px;cursor:pointer;min-height:28px}
 .tog.off{opacity:.45}
-.part{display:flex;gap:8px;align-items:baseline;padding:5px 4px;border-radius:4px;cursor:pointer;font-size:13px;border:0;background:none;color:var(--ink);text-align:left;width:100%}
-.part:hover,.part.on{background:var(--chip)}
+.part,.item{display:flex;gap:8px;align-items:baseline;padding:6px 4px;border-radius:4px;cursor:pointer;font-size:13px;border:0;background:none;color:var(--ink);text-align:left;width:100%;font-family:var(--f-body)}
+.part:hover,.part.on,.item:hover,.item.on{background:var(--chip)}
 .part code{font:500 11px var(--f-mono);color:var(--muted);flex:0 0 74px}
+.item b{font:600 13px var(--f-mono);color:var(--accent);flex:0 0 28px}
+.item span{font-size:14px}
+ol.ops{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;line-height:1.45}
+.box{border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:6px;font-size:13.5px}
+.box strong{font:600 12px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.box ul{margin:0;padding-left:18px}
+.check{border-left:3px solid #2a9a3a;padding-left:10px;font-size:14px}
+.nav{display:flex;gap:8px;align-items:center}
+.nav .count{font:500 13px var(--f-mono);color:var(--muted);margin-left:auto}
+.flow{width:100%;height:auto}
+.flow text{font:600 11px var(--f-body);fill:var(--ink)}
+.flow .sub{font:400 10px var(--f-body);fill:var(--muted)}
+.flow rect{fill:var(--chip);stroke:var(--line)}
+.flow path{stroke:var(--accent);fill:none;stroke-width:2}
+.flow .arr{fill:var(--accent)}
 .foot{font-size:12px;color:var(--muted);line-height:1.5}
-@media (max-width:820px){
-  .app{grid-template-columns:1fr;grid-template-rows:68vh auto;height:auto}
+.stepbar{position:absolute;left:12px;right:12px;bottom:12px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;
+  background:color-mix(in srgb,var(--panel) 92%,transparent);border:1px solid var(--line);border-radius:8px;padding:10px 14px}
+.stepbar .ttl{font:600 18px var(--f-display);min-width:0;flex:1 1 200px}
+.stepbar .ttl small{display:block;font:500 12px var(--f-mono);color:var(--accent)}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr;grid-template-rows:66vh auto;height:auto}
   aside{border-left:0;border-top:1px solid var(--line);padding-left:max(16px,env(safe-area-inset-left,0px))}
   .ctrl{grid-template-columns:1fr 1fr;left:8px;right:8px;bottom:8px;padding:8px 10px}
-  .head h1{font-size:24px}.views{top:auto;bottom:auto;top:62px;left:16px;right:auto;justify-content:flex-start}
+  .head h1{font-size:24px}.views{top:62px;left:16px;right:auto;justify-content:flex-start}
+  .lbl span{font-size:11px}
+  .stepbar .ttl{display:none}
 }
 @media (prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
 </style>
@@ -64,23 +96,44 @@ aside h2{font:600 15px var(--f-display);letter-spacing:.1em;text-transform:upper
 <div class="app">
   <div class="stage">
     <canvas id="c" aria-label="Modello 3D della macchina"></canvas>
-    <div class="head"><h1>ManipMasta</h1><p id="sub">Sfogliatrice a portale · tavolo 2000×800</p></div>
+    <div id="labels"></div>
+    <div class="head"><h1>ManipMasta</h1><p id="sub">Sfogliatrice a portale</p></div>
     <div class="views">
       <button class="btn" data-v="iso">Iso</button><button class="btn" data-v="front">Fronte</button>
       <button class="btn" data-v="side">Lato</button><button class="btn" data-v="top">Alto</button>
     </div>
-    <div class="ctrl">
+    <div class="ctrl" id="ctrlExplore">
       <label for="ex">Esploso <b id="exv">0 %</b><input id="ex" type="range" min="0" max="100" value="0"></label>
       <label for="xp">Posizione rullo X <b id="xpv">0 mm</b><input id="xp" type="range" min="-700" max="700" value="0"></label>
       <label for="gp">Luce rullo–piano <b id="gpv">40.0 mm</b><input id="gp" type="range" min="2" max="150" value="40" step="0.5"></label>
       <button class="btn" id="run">Simula ciclo</button>
     </div>
+    <div class="stepbar" id="ctrlTour" hidden>
+      <div class="ttl" id="tourTtl"></div>
+      <button class="btn" id="tourPlay">Pausa</button>
+      <button class="btn" id="tourDoor" hidden>Chiudi sportello</button>
+    </div>
+    <div class="stepbar" id="ctrlStep" hidden>
+      <button class="btn" id="stPrev" aria-label="Fase precedente">‹ Prec.</button>
+      <div class="ttl" id="stTtl"></div>
+      <button class="btn" id="stPlay">Pausa</button>
+      <button class="btn primary" id="stNext" aria-label="Fase successiva">Succ. ›</button>
+    </div>
   </div>
   <aside>
-    <section class="sel" id="info"><span class="code">—</span><span class="nm">Seleziona un pezzo</span><span class="hint">Tocca un componente nella vista o nell'elenco per vederne materiale e fornitura.</span></section>
-    <h2>Componenti</h2>
-    <div id="list"></div>
-    <p class="foot">Modello concettuale generato da <code>cad/model.py</code>. Quote ipotizzate su tavolo standard: si rigenera con le misure reali.</p>
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" id="tab-explore" aria-selected="true">Esplora</button>
+      <button class="tab" role="tab" id="tab-tour" aria-selected="false">Come funziona</button>
+      <button class="tab" role="tab" id="tab-step" aria-selected="false">Montaggio</button>
+    </div>
+    <div id="pExplore">
+      <section class="sel" id="info"><span class="code">—</span><span class="nm">Seleziona un pezzo</span><span class="hint">Tocca un componente nella vista o nell'elenco per vederne materiale, fissaggio e fornitura.</span></section>
+      <h2 style="margin:14px 0 6px">Componenti</h2>
+      <div id="list"></div>
+    </div>
+    <div id="pTour" hidden></div>
+    <div id="pStep" hidden></div>
+    <p class="foot">Modello concettuale generato da <code>cad/model.py</code> su tavolo ipotetico 2000×800: si rigenera con le misure reali.</p>
   </aside>
 </div>
 
@@ -89,8 +142,9 @@ aside h2{font:600 15px var(--f-display);letter-spacing:.1em;text-transform:upper
 <script>
 const MODEL = /*MODEL*/null;
 const P = MODEL.params;
-document.getElementById('sub').textContent = `Sfogliatrice a portale · tavolo ${P.table_L}×${P.table_W}`;
-const canvas = document.getElementById('c');
+const $ = id => document.getElementById(id);
+$('sub').textContent = `Sfogliatrice a portale · tavolo ${P.table_L}×${P.table_W}`;
+const canvas = $('c');
 const renderer = new THREE.WebGLRenderer({canvas, antialias:true, preserveDrawingBuffer:true});
 renderer.setPixelRatio(Math.min(2, window.devicePixelRatio||1));
 const scene = new THREE.Scene();
@@ -100,65 +154,175 @@ const controls = new THREE.OrbitControls(camera, canvas);
 controls.enableDamping = true; controls.target.set(0,0,200);
 scene.add(new THREE.HemisphereLight(0xffffff, 0x445566, 0.75));
 const sun = new THREE.DirectionalLight(0xffffff, 0.7); sun.position.set(-1500,-2200,3000); scene.add(sun);
-const fill = new THREE.DirectionalLight(0xffffff, 0.3); fill.position.set(2000,1500,800); scene.add(fill);
-
-function cssVar(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()}
-function applyTheme(){scene.background = new THREE.Color(cssVar('--viewport')||'#e3e8ed')}
+const fill = new THREE.DirectionalLight(0xffffff, 0.35); fill.position.set(2000,1500,800); scene.add(fill);
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function applyTheme(){ scene.background = new THREE.Color(cssVar('--viewport')||'#e3e8ed'); }
 applyTheme();
-try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme)}catch(e){}
+try{ matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyTheme) }catch(e){}
 new MutationObserver(applyTheme).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
 
-const parts = [];
-let dough = null;
+// ---------------------------------------------------------------- costruzione
+const state = {mode:'explore', ex:0, x:0, gap:P.gap_ref, minGap:999, door:0, step:1, f:0, tour:null, playing:true, freeze:false};
+const parts = [], spins = [], byCode = {};
+function mat(col){ return new THREE.MeshStandardMaterial({color:col, metalness:/^#(1|2)/.test(col)?0.2:0.35, roughness:0.55}); }
+function cylMesh(r,l,col,ax){
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(r,r,Math.max(l,0.1),40), mat(col));
+  if(ax==='x') m.rotation.z = Math.PI/2; else if(ax==='z') m.rotation.x = Math.PI/2;
+  return m;
+}
+function markMesh(q){
+  const L = q.l*0.92, w = Math.max(3, q.r*0.35), t = 2, r = q.r+0.6;
+  const m = new THREE.Mesh(new THREE.BoxGeometry(1,1,1), mat('#e0a100'));
+  if(q.ax==='y'){ m.scale.set(w,L,t); m.position.set(0,0,r); }
+  else if(q.ax==='x'){ m.scale.set(L,w,t); m.position.set(0,0,r); }
+  else { m.scale.set(t,w,L); m.position.set(r,0,0); }
+  return m;
+}
+function buildPrim(q, parent, origin){
+  const o = origin || [0,0,0];
+  if(q.t==='tube'){
+    const pts = q.pts.map(p=>new THREE.Vector3(p[0]-o[0],p[1]-o[1],p[2]-o[2]));
+    for(let i=0;i<pts.length-1;i++){
+      const a=pts[i], b=pts[i+1], d=b.clone().sub(a), len=d.length();
+      const m = new THREE.Mesh(new THREE.CylinderGeometry(q.r,q.r,len,16), mat(q.col));
+      m.position.copy(a.clone().add(b).multiplyScalar(0.5));
+      m.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0), d.normalize());
+      parent.add(m);
+      const s = new THREE.Mesh(new THREE.SphereGeometry(q.r,16,10), mat(q.col)); s.position.copy(b); parent.add(s);
+    }
+    return;
+  }
+  const c = new THREE.Vector3(q.c[0]-o[0], q.c[1]-o[1], q.c[2]-o[2]);
+  if(q.t==='box'){ const m = new THREE.Mesh(new THREE.BoxGeometry(q.s[0],q.s[1],q.s[2]), mat(q.col)); m.position.copy(c); parent.add(m); return; }
+  if(q.t==='ell'){ const m = new THREE.Mesh(new THREE.SphereGeometry(1,40,24), mat(q.col)); m.scale.set(q.r[0],q.r[1],q.r[2]); m.position.copy(c); parent.add(m); return; }
+  if(q.spin){
+    const piv = new THREE.Group(); piv.position.copy(c);
+    piv.add(cylMesh(q.r,q.l,q.col,q.ax));
+    if(q.mark) piv.add(markMesh(q));
+    piv.userData.spin = q.spin; piv.userData.ax = q.ax;
+    parent.add(piv); spins.push(piv); return;
+  }
+  const m = cylMesh(q.r,q.l,q.col,q.ax); m.position.copy(c); parent.add(m);
+}
+function partCenter(p){
+  let n=0; const s=[0,0,0];
+  for(const q of p.prims){ for(let i=0;i<3;i++) s[i]+=q.c[i]; n++; }
+  if(p.chain) return [p.chain.x0+150, p.chain.y, (p.chain.zl+p.chain.zh)/2];
+  return n? s.map(v=>v/n) : [0,0,0];
+}
 for (const p of MODEL.parts){
   const g = new THREE.Group(); g.userData.part = p;
-  for (const q of p.prims){
-    let geo, mesh;
-    const mat = new THREE.MeshStandardMaterial({color:q.col, metalness:/^#(1|2)/.test(q.col)?0.2:0.35, roughness:0.55});
-    if (q.t==='box'){ geo = new THREE.BoxGeometry(Math.abs(q.s[0]),Math.abs(q.s[1]),Math.abs(q.s[2])); mesh = new THREE.Mesh(geo,mat); }
-    else if (q.t==='cyl'){ geo = new THREE.CylinderGeometry(q.r,q.r,Math.max(q.l,0.1),40); mesh = new THREE.Mesh(geo,mat);
-      if (q.ax==='x') mesh.rotation.z = Math.PI/2; else if (q.ax==='z') mesh.rotation.x = Math.PI/2; }
-    else { geo = new THREE.SphereGeometry(1,40,24); mesh = new THREE.Mesh(geo,mat); mesh.scale.set(q.r[0],q.r[1],q.r[2]); }
-    mesh.position.set(q.c[0],q.c[1],q.c[2]);
-    mesh.userData.base = mesh.position.clone(); mesh.userData.prim = q;
-    g.add(mesh);
+  if(p.chain){
+    const ch=p.chain, mk=()=>{const m=new THREE.Mesh(new THREE.BoxGeometry(1,1,1),mat(ch.col)); g.add(m); return m;};
+    const R=(ch.zh-ch.zl)/2;
+    const bend=new THREE.Mesh(new THREE.CylinderGeometry(R+ch.h/2,R+ch.h/2,ch.w,28,1,false,0,Math.PI),mat(ch.col));
+    g.add(bend);
+    g.userData.chain={lo:mk(), hi:mk(), bend, R};
+  } else if(p.pivot){
+    const piv = new THREE.Group(); piv.position.set(...p.pivot.p);
+    for(const q of p.prims) buildPrim(q, piv, p.pivot.p);
+    g.add(piv); g.userData.pivot = piv;
+  } else {
+    for(const q of p.prims) buildPrim(q, g);
   }
-  scene.add(g);
-  parts.push(g);
-  if (p.code==='IMP') dough = g.children[0];
+  g.userData.center = partCenter(p);
+  const e = p.dexp && (p.dexp[0]||p.dexp[1]||p.dexp[2]) ? p.dexp : p.explode.map(v=>v*0.6);
+  g.userData.stepOff = e;
+  scene.add(g); parts.push(g);
+  (byCode[p.code]=byCode[p.code]||[]).push(g);
 }
+const dough = byCode['IMP'] && byCode['IMP'][0].children[0];
+const g_meshes = g => { const a=[]; g.traverse(o=>{ if(o.isMesh) a.push(o); }); return a; };
 
-const state = {ex:0, x:0, gap:P.gap_ref, minGap:999};
+// ---------------------------------------------------------------- stato → scena
 const V0 = 4/3*Math.PI*110*110*55;
 function updateDough(){
   if(!dough) return;
-  const h = Math.min(55, state.minGap/2);
-  const ry = Math.min(180, 110*Math.pow(55/h,0.18));
-  const rx = Math.min(780, V0/(4/3*Math.PI*ry*h));
+  const h = Math.min(55, state.minGap/2), ry = Math.min(175, 110*Math.pow(55/h,0.18));
+  const rx = Math.min(760, V0/(4/3*Math.PI*ry*h));
   dough.scale.set(rx,ry,h); dough.position.z = h;
 }
+const arrows = [];
+function clearArrows(){ arrows.forEach(a=>scene.remove(a)); arrows.length=0; }
 function layout(){
   const dz = state.gap - P.gap_ref;
   for (const g of parts){
-    const p = g.userData.part, e = p.explode;
-    let ox=e[0]*state.ex, oy=e[1]*state.ex, oz=e[2]*state.ex;
-    if (p.mov!=='fixed') ox += state.x;
-    if (p.mov==='xz') oz += dz;
-    g.position.set(ox,oy,oz);
+    const p = g.userData.part;
+    let o = [0,0,0];
+    if(state.mode!=='step'){ const e=p.explode, d=p.dexp||[0,0,0]; o=[(e[0]+d[0]*0.4)*state.ex,(e[1]+d[1]*0.4)*state.ex,(e[2]+d[2]*0.4)*state.ex]; }
+    else if(p.step===state.step){ const s=g.userData.stepOff; o=[s[0]*state.f,s[1]*state.f,s[2]*state.f]; }
+    if (p.mov!=='fixed') o[0] += state.x;
+    if (p.mov==='xz') o[2] += dz;
+    g.position.set(o[0],o[1],o[2]);
+    if(g.userData.pivot) g.userData.pivot.rotation.z = -state.door*1.75;
+    if(g.userData.chain){
+      const ch=p.chain, c=g.userData.chain;
+      const xcar = state.x - o[0];
+      const b = (ch.L + ch.x0 + xcar)/2;
+      const lo=Math.max(1,b-ch.x0), hi=Math.max(1,b-xcar);
+      c.lo.scale.set(lo,ch.w,ch.h); c.lo.position.set((ch.x0+b)/2, ch.y, ch.zl);
+      c.hi.scale.set(hi,ch.w,ch.h); c.hi.position.set((xcar+b)/2, ch.y, ch.zh);
+      c.bend.position.set(b, ch.y, (ch.zl+ch.zh)/2);
+    }
+  }
+  const rk = 1/(P.roller_d/2)*1.02;
+  for(const piv of spins){
+    const s = piv.userData.spin;
+    const v = s.src==='z' ? (state.gap-P.gap_ref) : state.x;
+    const a = s.k*v;
+    if(piv.userData.ax==='x') piv.rotation.x=a; else if(piv.userData.ax==='y') piv.rotation.y=a; else piv.rotation.z=a;
   }
   updateDough();
 }
 
+// ---------------------------------------------------------------- ghost / highlight
+function setGhost(g, on){
+  for(const m of g_meshes(g)){ m.material.transparent = on; m.material.opacity = on?0.1:1; m.material.depthWrite = !on; }
+}
+function setGlow(g, on){ const c=new THREE.Color(cssVar('--accent')||'#c98a00').multiplyScalar(0.4); for(const m of g_meshes(g)) m.material.emissive.copy(on?c:new THREE.Color(0)); }
+function resetLook(){ parts.forEach(g=>{ g.visible=true; setGhost(g,false); setGlow(g,false); }); clearArrows(); }
+
+// ---------------------------------------------------------------- camera
+let fly=null;
 const views = {iso:[-2300,-2700,1900], front:[0,-4200,350], side:[-4200,0,350], top:[0,-1,4600]};
+function flyTo(pos, tgt, ms=900){
+  const p0=camera.position.clone(), t0=controls.target.clone(), p1=new THREE.Vector3(...pos), t1=new THREE.Vector3(...tgt);
+  if(state.freeze||ms===0){ camera.position.copy(p1); controls.target.copy(t1); controls.update(); return; }
+  fly={p0,t0,p1,t1,ms,start:performance.now()};
+}
 function setView(v){
-  const k = 1+0.35*state.ex, t = views[v]; camera.position.set(t[0]*k,t[1]*k,t[2]*k); controls.target.set(0,0,v==='top'?0:200); controls.update();
+  const k = 1+0.35*(state.mode==='explore'?state.ex:0), t = views[v];
+  flyTo([t[0]*k,t[1]*k,t[2]*k],[0,0,v==='top'?0:200], 600);
   document.querySelectorAll('[data-v]').forEach(b=>b.classList.toggle('on',b.dataset.v===v));
 }
 document.querySelectorAll('[data-v]').forEach(b=>b.addEventListener('click',()=>setView(b.dataset.v)));
 
-const $ = id=>document.getElementById(id);
-function bindRange(id, key, fmt){
-  const el=$(id); el.addEventListener('input',()=>{state[key]=parseFloat(el.value)/(key==='ex'?100:1); if(key==='gap') state.minGap=Math.min(state.minGap,state.gap); refresh();});
+// ---------------------------------------------------------------- etichette
+const labelsEl = $('labels');
+let activeLabels = [];
+function setLabels(list){
+  labelsEl.innerHTML=''; activeLabels = list.map(l=>{
+    const d=document.createElement('div'); d.className='lbl';
+    const i=document.createElement('i'); const s=document.createElement('span'); s.textContent=l.text; d.append(i,s); labelsEl.append(d);
+    return {...l, el:d};
+  });
+}
+function drawLabels(){
+  const r = canvas.getBoundingClientRect(), dz = state.gap-P.gap_ref;
+  for(const l of activeLabels){
+    let v;
+    if(l.g){ const p=l.g.userData.part, c=l.g.userData.center; v = new THREE.Vector3(c[0]+(p.mov!=='fixed'?state.x:0), c[1], c[2]+(p.mov==='xz'?dz:0)); }
+    else { v = new THREE.Vector3(l.p[0]+(l.mov!=='fixed'?state.x:0), l.p[1], l.p[2]+(l.mov==='xz'?dz:0)); }
+    v.project(camera);
+    const vis = v.z<1 && Math.abs(v.x)<1.05 && Math.abs(v.y)<1.05;
+    l.el.hidden = !vis;
+    if(vis){ l.el.style.left=((v.x+1)/2*r.width)+'px'; l.el.style.top=((1-v.y)/2*r.height)+'px'; }
+  }
+}
+
+// ---------------------------------------------------------------- modalità ESPLORA
+function bindRange(id, key){
+  const el=$(id); el.addEventListener('input',()=>{ state[key]=parseFloat(el.value)/(key==='ex'?100:1); if(key==='gap') state.minGap=Math.min(state.minGap,state.gap); refresh(); });
 }
 function refresh(){
   $('ex').value=Math.round(state.ex*100); $('exv').textContent=Math.round(state.ex*100)+' %';
@@ -167,22 +331,19 @@ function refresh(){
   layout();
 }
 bindRange('ex','ex'); bindRange('xp','x'); bindRange('gp','gap');
-
-// selezione
 let selected=null;
 function select(g){
-  if(selected) selected.children.forEach(m=>m.material.emissive.setHex(0x000000));
+  if(state.mode!=='explore') return;
+  if(selected) setGlow(selected,false);
   selected=g;
   document.querySelectorAll('.part').forEach(b=>b.classList.toggle('on', b._g===g));
-  const box=$('info');
-  if(!g){return}
-  g.children.forEach(m=>m.material.emissive.set(cssVar('--accent')||'#c98a00').multiplyScalar(0.35));
-  const p=g.userData.part;
-  box.innerHTML='';
+  if(!g) return;
+  setGlow(g,true);
+  const p=g.userData.part, box=$('info'); box.innerHTML='';
   const c=document.createElement('span'); c.className='code'; c.textContent=p.code;
   const n=document.createElement('span'); n.className='nm'; n.textContent=p.name;
-  const dl=document.createElement('dl');
-  const rows=[['Gruppo',p.group],['Moto',{fixed:'fisso',x:'trasla con X',xz:'trasla con X e sale/scende con Z'}[p.mov]],...Object.entries(p.info)];
+  const dl=document.createElement('dl'); dl.className='kv';
+  const rows=[['Gruppo',p.group],['Movimento',{fixed:'fisso',x:'trasla con X',xz:'trasla con X e sale/scende con Z'}[p.mov]],['Fase montaggio',p.step?String(p.step):'—'],...Object.entries(p.info)];
   for(const [k,v] of rows){const dt=document.createElement('dt');dt.textContent=k;const dd=document.createElement('dd');dd.textContent=v;dl.append(dt,dd)}
   box.append(c,n,dl);
 }
@@ -192,14 +353,12 @@ canvas.addEventListener('pointerup',e=>{
   if(!down||Math.hypot(e.clientX-down[0],e.clientY-down[1])>5) return;
   const r=canvas.getBoundingClientRect(); mouse.set((e.clientX-r.left)/r.width*2-1, -(e.clientY-r.top)/r.height*2+1);
   ray.setFromCamera(mouse,camera);
-  const hit=ray.intersectObjects(parts.filter(g=>g.visible),true)[0];
-  select(hit?hit.object.parent:null);
+  const hit=ray.intersectObjects(parts.filter(g=>g.visible),true).find(h=>!h.object.material.transparent);
+  let o=hit&&hit.object; while(o && !(o.userData&&o.userData.part)) o=o.parent;
+  select(o||null);
 });
-
-// elenco per gruppi
 const groups={};
 for(const g of parts){(groups[g.userData.part.group]=groups[g.userData.part.group]||[]).push(g)}
-const list=$('list');
 for(const [name,gs] of Object.entries(groups)){
   const wrap=document.createElement('div'); wrap.className='grp';
   const h=document.createElement('div'); h.className='grp-h';
@@ -210,42 +369,167 @@ for(const [name,gs] of Object.entries(groups)){
   for(const g of gs){const b=document.createElement('button'); b.className='part'; b._g=g;
     const c=document.createElement('code'); c.textContent=g.userData.part.code; const n=document.createElement('span'); n.textContent=g.userData.part.name;
     b.append(c,n); b.addEventListener('click',()=>select(g)); wrap.append(b);}
-  list.append(wrap);
+  $('list').append(wrap);
 }
 
-// simulazione ciclo RUN (cx=0 s0=150 s1=300 g0=40 g1=5 dg=5 n=1)
+// ---------------------------------------------------------------- animazioni
 let anim=null;
-function* cycle(){
-  const g0=40,g1=5,dg=5,n=1,s0=150,s1=300,m=60;
-  const np=Math.ceil((g0-g1)/dg)+n; let gap=g0;
-  yield* moveTo('gap',g0+20); yield* moveTo('x',-(s0+m)); yield* moveTo('gap',g0);
-  for(let k=0;k<np;k++){
-    const s=s0+(s1-s0)*k/Math.max(1,np-1);
-    yield* moveTo('x',s+m); gap=Math.max(g1,gap-dg); yield* moveTo('gap',gap); yield* moveTo('x',-(s+m));
-  }
-  yield* moveTo('gap',g1+30); yield* moveTo('x',0);
-}
-function* moveTo(k,target){
-  const v = k==='x'?18:1.2;
+function* moveTo(k,target,v){
+  v = v || (k==='x'?18:1.2);
   while(Math.abs(state[k]-target)>0.01){ const d=target-state[k]; state[k]+=Math.sign(d)*Math.min(Math.abs(d),v);
     if(k==='gap') state.minGap=Math.min(state.minGap,state.gap); yield; }
 }
+function* wait(n){ for(let i=0;i<n;i++) yield; }
+function* cycle(){
+  const g0=40,g1=5,dg=5,n=1,s0=150,s1=300,m=60, np=Math.ceil((g0-g1)/dg)+n; let gap=g0;
+  state.minGap=999;
+  yield* moveTo('gap',g0+20); yield* moveTo('x',-(s0+m)); yield* moveTo('gap',g0);
+  for(let k=0;k<np;k++){ const s=s0+(s1-s0)*k/Math.max(1,np-1);
+    yield* moveTo('x',s+m); gap=Math.max(g1,gap-dg); yield* moveTo('gap',gap); yield* moveTo('x',-(s+m)); }
+  yield* moveTo('gap',g1+30); yield* moveTo('x',0);
+}
+function* loopAnim(kind){
+  for(;;){
+    if(kind==='x'){ yield* moveTo('x',-500,6); yield* wait(20); yield* moveTo('x',500,6); yield* wait(20); }
+    else if(kind==='z'){ yield* moveTo('gap',120,0.6); yield* wait(25); yield* moveTo('gap',10,0.6); yield* wait(25); }
+    else if(kind==='r'){ yield* moveTo('x',-250,3); yield* moveTo('x',250,3); }
+    else if(kind==='door'){ while(state.door<1){ state.door=Math.min(1,state.door+0.02); yield; } return; }
+    else if(kind==='cycle'){ yield* cycle(); yield* wait(60); state.minGap=999; }
+    else return;
+  }
+}
 $('run').addEventListener('click',()=>{
   if(anim){anim=null; $('run').textContent='Simula ciclo'; $('run').classList.remove('on'); return;}
-  state.minGap=999; state.ex=0; state.x=0; state.gap=P.gap_ref; anim=cycle(); $('run').textContent='Ferma'; $('run').classList.add('on');
+  state.ex=0; state.x=0; state.gap=P.gap_ref; anim=cycle(); $('run').textContent='Ferma'; $('run').classList.add('on');
 });
 
+// ---------------------------------------------------------------- modalità COME FUNZIONA
+function el(tag, cls, text){ const e=document.createElement(tag); if(cls) e.className=cls; if(text!=null) e.textContent=text; return e; }
+const FLOW = `<svg class="flow" viewBox="0 0 340 150" role="img" aria-label="Schema di controllo: Arduino invia impulsi al driver, il driver alimenta il motore, l'encoder rimanda la posizione al driver">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto"><path class="arr" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+<rect x="4" y="20" width="84" height="46" rx="6"/><text x="46" y="40" text-anchor="middle">Arduino</text><text class="sub" x="46" y="55" text-anchor="middle">STEP · DIR · ENA</text>
+<rect x="128" y="20" width="84" height="46" rx="6"/><text x="170" y="40" text-anchor="middle">Driver CL57T</text><text class="sub" x="170" y="55" text-anchor="middle">corrente fasi A/B</text>
+<rect x="252" y="20" width="84" height="46" rx="6"/><text x="294" y="40" text-anchor="middle">Motore</text><text class="sub" x="294" y="55" text-anchor="middle">NEMA23 2 Nm</text>
+<rect x="252" y="96" width="84" height="40" rx="6"/><text x="294" y="114" text-anchor="middle">Encoder</text><text class="sub" x="294" y="128" text-anchor="middle">4000 conteggi/giro</text>
+<path d="M88 43 H126" marker-end="url(#ah)"/><path d="M212 43 H250" marker-end="url(#ah)"/><path d="M294 66 V94" marker-end="url(#ah)"/>
+<path d="M252 116 H170 V68" marker-end="url(#ah)"/><text class="sub" x="176" y="108">posizione reale</text>
+<path d="M128 56 H100 V96 H46 V68" marker-end="url(#ah)" stroke-dasharray="4 3"/><text class="sub" x="8" y="110">ALM: allarme</text><text class="sub" x="8" y="122">se perde il passo</text>
+</svg>`;
+function renderTourList(){
+  const pT=$('pTour'); pT.innerHTML='';
+  pT.append(el('h2',null,'Visite guidate'));
+  const lst=el('div');
+  MODEL.tours.forEach((t,i)=>{ const b=el('button','item'); b.dataset.tour=t.id; b.append(el('b',null,String(i+1)), el('span',null,t.t)); b.addEventListener('click',()=>startTour(t.id)); lst.append(b); });
+  pT.append(lst);
+  const body=el('div'); body.id='tourBody'; body.style.display='flex'; body.style.flexDirection='column'; body.style.gap='10px'; pT.append(body);
+}
+function clearViewBtns(){ document.querySelectorAll('[data-v]').forEach(b=>b.classList.remove('on')); }
+function startTour(id){
+  clearViewBtns();
+  const t = MODEL.tours.find(x=>x.id===id); state.tour=t;
+  document.querySelectorAll('[data-tour]').forEach(b=>b.classList.toggle('on', b.dataset.tour===id));
+  resetLook(); state.ex=0; state.x=0; state.gap=P.gap_ref; state.door = 0; state.minGap=999;
+  if(t.focus.length){ parts.forEach(g=>{ const code=g.userData.part.code; if(!t.focus.includes(code) && code!=='TAV') setGhost(g,true); }); }
+  if(t.id==='quadro'){ state.door=0; }
+  setLabels(MODEL.labels.filter(l=>l.tours.includes(t.id)));
+  const b=$('tourBody'); b.innerHTML=''; b.append(el('h3',null,t.t));
+  t.p.forEach(x=>b.append(el('p',null,x)));
+  if(t.id==='servo'){ const d=el('div'); d.innerHTML=FLOW; b.append(d); }
+  $('tourTtl').textContent=t.t;
+  $('tourDoor').hidden = t.id!=='quadro';
+  flyTo(t.cam,t.tgt,1000);
+  anim = loopAnim(t.anim); state.playing=true; $('tourPlay').textContent='Pausa';
+  layout();
+}
+$('tourPlay').addEventListener('click',()=>{ state.playing=!state.playing; $('tourPlay').textContent=state.playing?'Pausa':'Riprendi'; });
+$('tourDoor').addEventListener('click',()=>{ state.door = state.door>0.5?0:1; $('tourDoor').textContent=state.door>0.5?'Chiudi sportello':'Apri sportello'; layout(); });
+
+// ---------------------------------------------------------------- modalità MONTAGGIO
+function renderStepPanel(){
+  const s = MODEL.steps[state.step], pS=$('pStep'); pS.innerHTML='';
+  pS.append(el('h2',null,`Fase ${state.step} di ${MODEL.steps.length-1}`), el('h3',null,s.t));
+  const ol=el('ol','ops'); s.ops.forEach(o=>ol.append(el('li',null,o))); pS.append(ol);
+  const newParts = parts.filter(g=>g.userData.part.step===state.step);
+  if(newParts.length){ const b=el('div','box'); b.append(el('strong',null,'Pezzi di questa fase'));
+    const ul=el('ul'); const seen=new Set(); newParts.forEach(g=>{ const p=g.userData.part; const k=p.code+p.name; if(seen.has(k)) return; seen.add(k); ul.append(el('li',null,`${p.code} — ${p.name}`)); }); b.append(ul); pS.append(b); }
+  if(s.vit && s.vit.length){ const b=el('div','box'); b.append(el('strong',null,'Viteria')); const ul=el('ul'); s.vit.forEach(v=>ul.append(el('li',null,v))); b.append(ul);
+    if(s.cpl) b.append(el('div',null,'Coppie: '+s.cpl)); pS.append(b); }
+  pS.append(el('div','check','Controllo: '+s.chk));
+  const lst=el('div'); lst.style.marginTop='6px'; lst.append(el('h2',null,'Tutte le fasi'));
+  MODEL.steps.forEach((x,i)=>{ if(!i) return; const b=el('button','item'+(i===state.step?' on':'')); b.append(el('b',null,String(i)), el('span',null,x.t)); b.addEventListener('click',()=>goStep(i)); lst.append(b); });
+  pS.append(lst);
+  $('stTtl').innerHTML=''; const sm=el('small',null,`FASE ${state.step}/${MODEL.steps.length-1}`); $('stTtl').append(sm, document.createTextNode(s.t));
+  $('stPrev').disabled = state.step<=1; $('stNext').disabled = state.step>=MODEL.steps.length-1;
+}
+function goStep(i){
+  clearViewBtns();
+  state.step=i; const s=MODEL.steps[i];
+  resetLook(); state.x=0; state.gap=P.gap_ref; state.minGap=999; state.door=s.door?1:0; state.f=1;
+  parts.forEach(g=>{ const p=g.userData.part; g.visible = p.code==='TAV' || p.step<=i; if(p.code==='IMP') g.visible = i>=MODEL.steps.length-1; setGlow(g, p.step===i); });
+  const cur = parts.filter(g=>g.userData.part.step===i);
+  const seen=new Set();
+  setLabels(cur.filter(g=>{const k=g.userData.part.name.replace(/ lato Y[−+].*/,''); if(seen.has(k)) return false; seen.add(k); return true;}).map(g=>({text:g.userData.part.name, g})));
+  for(const g of cur){
+    const o=g.userData.stepOff, len=Math.hypot(...o); if(len<1) continue;
+    const c=new THREE.Vector3(...g.userData.center);
+    const dir=new THREE.Vector3(-o[0],-o[1],-o[2]).normalize();
+    const a=new THREE.ArrowHelper(dir, c.clone().add(new THREE.Vector3(...o)), len*0.85, new THREE.Color(cssVar('--accent')||'#c98a00').getHex(), Math.min(60,len*0.2), Math.min(30,len*0.1));
+    scene.add(a); arrows.push(a);
+  }
+  // inquadratura automatica: pezzi nuovi nella posizione finale e in quella di partenza
+  const box = new THREE.Box3();
+  const tgtParts = cur.length ? cur : parts.filter(g=>g.visible && g.userData.part.code!=='TAV');
+  for(const f of [0,1]){ state.f=f; layout(); tgtParts.forEach(g=>{ g.updateMatrixWorld(true); box.expandByObject(g); }); }
+  state.f=1; layout();
+  const sph = box.getBoundingSphere(new THREE.Sphere());
+  const r = Math.max(sph.radius*1.08, 260);
+  const dir = new THREE.Vector3(s.cam[0]-s.tgt[0], s.cam[1]-s.tgt[1], s.cam[2]-s.tgt[2]).normalize();
+  const fovv = camera.fov*Math.PI/180, fovh = 2*Math.atan(Math.tan(fovv/2)*camera.aspect);
+  const d = r/Math.sin(Math.min(fovv,fovh)/2);
+  const pos = sph.center.clone().add(dir.multiplyScalar(d));
+  flyTo(pos.toArray(), sph.center.toArray(), 900);
+  anim = stepAnim(); state.playing=true; $('stPlay').textContent='Pausa';
+  renderStepPanel(); layout();
+}
+function* stepAnim(){
+  for(;;){ state.f=1; yield* wait(30); for(let i=0;i<=45;i++){ const t=i/45; state.f=1-(t*t*(3-2*t)); yield; } yield* wait(50); }
+}
+$('stPrev').addEventListener('click',()=>goStep(Math.max(1,state.step-1)));
+$('stNext').addEventListener('click',()=>goStep(Math.min(MODEL.steps.length-1,state.step+1)));
+$('stPlay').addEventListener('click',()=>{ state.playing=!state.playing; $('stPlay').textContent=state.playing?'Pausa':'Riprendi'; });
+
+// ---------------------------------------------------------------- tabs
+function setMode(mode){
+  state.mode=mode; anim=null; resetLook(); setLabels([]);
+  for(const [m,t,p,c] of [['explore','tab-explore','pExplore','ctrlExplore'],['tour','tab-tour','pTour','ctrlTour'],['step','tab-step','pStep','ctrlStep']]){
+    $(t).setAttribute('aria-selected', String(m===mode)); $(p).hidden = m!==mode; $(c).hidden = m!==mode;
+  }
+  $('run').textContent='Simula ciclo'; $('run').classList.remove('on');
+  state.door=0; state.x=0; state.gap=P.gap_ref; state.minGap=999;
+  if(mode==='explore'){ setView('iso'); refresh(); }
+  if(mode==='tour'){ renderTourList(); startTour(state.tour?state.tour.id:MODEL.tours[0].id); }
+  if(mode==='step'){ goStep(state.step||1); }
+}
+$('tab-explore').addEventListener('click',()=>setMode('explore'));
+$('tab-tour').addEventListener('click',()=>setMode('tour'));
+$('tab-step').addEventListener('click',()=>setMode('step'));
+
+// ---------------------------------------------------------------- loop
 function resize(){
   const r=canvas.parentElement.getBoundingClientRect();
   renderer.setSize(r.width,r.height,false); camera.aspect=r.width/Math.max(1,r.height); camera.updateProjectionMatrix();
 }
 new ResizeObserver(resize).observe(canvas.parentElement);
-function loop(){
-  if(anim){ const r=anim.next(); if(r.done){anim=null; $('run').textContent='Simula ciclo'; $('run').classList.remove('on');} refresh(); }
-  controls.update(); renderer.render(scene,camera); requestAnimationFrame(loop);
+function loop(now){
+  if(fly){ const t=Math.min(1,(now-fly.start)/fly.ms), e=t*t*(3-2*t);
+    camera.position.lerpVectors(fly.p0,fly.p1,e); controls.target.lerpVectors(fly.t0,fly.t1,e); if(t>=1) fly=null; }
+  if(anim && state.playing && !state.freeze){ const r=anim.next(); if(r.done){ anim=null; if(state.mode==='explore'){ $('run').textContent='Simula ciclo'; $('run').classList.remove('on'); } }
+    if(state.mode==='explore') refresh(); else layout(); }
+  controls.update(); renderer.render(scene,camera); drawLabels(); requestAnimationFrame(loop);
 }
-// stato iniziale: parametri via hash (#esploso) per i render
-if(location.hash==='#esploso'){state.ex=1}
-setView('iso'); resize(); refresh(); loop();
-window.__mm={state,refresh,setView,select,parts};
+const h = location.hash.replace('#','');
+setView('iso'); resize(); refresh();
+if(h==='montaggio') setMode('step'); else if(h==='funziona') setMode('tour');
+requestAnimationFrame(loop);
+window.__mm={state,refresh,layout,setView,select,parts,setMode,goStep,startTour,flyTo,camera,controls,renderer,scene,drawLabels};
 </script>

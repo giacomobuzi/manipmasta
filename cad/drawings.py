@@ -158,61 +158,77 @@ def plate_specs(P):
         [(cx + sx * 23.57, cy + sy * 23.57, 5.5, f"{tag} M5 passante") for sx in (-1, 1) for sy in (-1, 1)]
     plates = []
 
-    # piastra carrello X 250x150x12
+    # quote dal modello 3D
+    ay = P["anchor_y"]; zy = ay - 90; sh_y = zy - 27; s_out = zy - 47
+    gdx, sdx = P["guide_dx"], P["screw_dx"]
+    car_z0 = P["beam_top"] + 18 + 35
+
+    # piastra carrello X: y locale 0 = bordo interno (y mondo = s_out - 23)
     cl, cw = P["car_len"], P["car_w"]
+    y_in = s_out - 23
+    cx = cl / 2
     h = []
-    for bx in (125 - 75, 125 + 75):          # pattini SBR20UU centrati sulla guida (y=75 dal bordo esterno)
+    for bx in (cx - 75, cx + 75):            # pattini SBR20UU centrati sulla guida
         for dx in (-17.5, 17.5):
             for dy in (-18, 18):
-                h.append((bx + dx, cw - 75 + dy, 6.6, "M6 pattino SBR20UU [V]"))
-    for x in (40, 105, 145, 210):
-        h.append((x, 16, 9, "M8 squadra piastra Z"))
-    for x in (5 + 20 - 0, ):
-        pass
-    h += [(25 - 8, 75 - 60 + 60, 9, "M8 traversa ponte"), (25 + 8 - 8, 75 + 60, 9, "M8 traversa ponte")]
-    h += [(65, cw - 12, 5.5, "M5 morsetto cinghia"), (65 + 0, cw - 30, 5.5, "M5 morsetto cinghia")]
+                h.append((bx + dx, ay - y_in + dy, 6.6, "M6 pattino SBR20UU [V]"))
+    for x in (cx - 100, cx - 35, cx + 35, cx + 100):
+        h.append((x, (zy + P["zplate_t"] + 24) - y_in, 9, "M8 squadra piastra Z"))
+    for gx in (-gdx, gdx):
+        h.append((cx + gx, sh_y - y_in, 17, "Ø17 passaggio albero Ø16 (inserimento dall'alto)"))
+    h.append((cx + sdx, sh_y - y_in, 30, "Ø30 passaggio vite/giunto Z"))
+    for ddx in (-23.6, 23.6):
+        for ddy in (-23.6, 23.6):
+            h.append((cx + sdx + ddx, sh_y - y_in + ddy, 5.5, "M5 distanziale motore Z"))
+    h += [(cx + 100, cw - 30, 9, "M8 traversa ponte"), (cx + 100, cw - 70, 9, "M8 traversa ponte")]
+    h += [(cx + 60 + dx, cw - 8, 5.5, "M5 attacco cinghia") for dx in (-12, 12)]
     plates.append(dict(code="CAR-01", name="Piastra carrello X", qty="2 (speculari)", t=12, w=cl, h=cw, holes=h,
-                       material="AISI 304 sp. 12", note="Lato y=0 = interno (verso il rullo). Rettificare le facce di appoggio pattini: planarità 0,05."))
+                       material="AISI 304 sp. 12", note="Y=0 = bordo interno (verso il rullo). Rettificare le facce di appoggio pattini: planarità 0,05."))
 
-    # piastra Z fissa
-    zh = M.load_params()["beam_top"] + 18 + 35 + P["car_t"] - P["zplate_bottom"]
+    # piastra Z fissa: y locale 0 = bordo inferiore
+    zh = car_z0 - P["zplate_bottom"]
     zw = P["zplate_w"]
     cx = zw / 2
     h = []
-    for gx in (-100, 100):
-        for gy in (25, zh - 55):
-            for dx in (-21, 21):
-                h.append((cx + gx + dx, gy, 6.6, "M6 supporto SK16 [V]"))
-    h += [(cx + 75 + dx, 30, 5.5, "M5 supporto BF12 [V]") for dx in (-20, 20)]
-    h += [(cx + 75 + dx, zh - 75, 5.5, "M5 supporto BK12 [V]") for dx in (-23, 23)]
-    for x in (cx - 105, cx - 35, cx + 35, cx + 105):
-        h.append((x, zh - 20, 9, "M8 squadra carrello"))
+    for gx in (-gdx, gdx):
+        for gz in (12, car_z0 - 30 - P["zplate_bottom"]):
+            for dx in (-16, 16):
+                h.append((cx + gx + dx, gz, 5.5, "M5 supporto SK16 [V]"))
+    h += [(cx + sdx + dx, 18, 5.5, "M5 supporto BF12 [V]") for dx in (-20, 20)]
+    h += [(cx + sdx + dx, car_z0 - 40 - P["zplate_bottom"], 5.5, "M5 supporto BK12 [V]") for dx in (-23, 23)]
+    for x in (cx - 50, cx, cx + 50):
+        h.append((x, zh - 13, 9, "M8 squadra carrello"))
     plates.append(dict(code="ZPL-01", name="Piastra Z fissa", qty="2 (speculari)", t=P["zplate_t"], w=zw, h=round(zh), holes=h,
-                       material="AISI 304 sp. 15", note="Fori supporti guida e vite coassiali tra loro: parallelismo guide 0,05/400."))
+                       material="AISI 304 sp. 15", note="Fori supporti SK16 e BK/BF lavorati in un unico piazzamento: parallelismo guide 0,05/400."))
 
-    # slitta Z
-    sw, sh_ = P["slide_w"] + 60, P["slide_h"]
+    # slitta Z: y locale 0 = bordo inferiore; asse rullo a slide_below
+    sw, sh_ = P["slide_w"], P["slide_h"]
     c0 = sw / 2
-    rc_local = 45
-    base = []
-    base.append((c0, rc_local, 30, "passaggio perno rullo Ø20"))
-    for dx in (-32, 32):
-        for dy in (-32, 32):
-            base.append((c0 + dx, rc_local + dy, 12.5, "M12 SUCF204"))
-    for gx in (-100, 100):
-        for dx in (-12, 12):
-            for dy in (-15, 15):
-                base.append((c0 + gx + dx, 200 + dy, 5.5, "M5 pattino SC16UU [V]"))
+    rl = P["slide_below"]
+    base = [(c0, rl, 47, "sede cuscinetto Ø47 H7 (S6204-2RS), passante con battuta")]
     for a in range(4):
         ang = math.radians(45 + 90 * a)
-        base.append((c0 + 75 + 19 * math.cos(ang), 180 + 19 * math.sin(ang), 5.5, "M5 chiocciola TR16 [V]"))
-    base.append((c0 + 75, 180, 30, "passaggio vite TR16"))
+        base.append((c0 + 30 * math.cos(ang), rl + 30 * math.sin(ang), 5.5, "M5 coperchio cuscinetto Ø72"))
+    for gx in (-gdx, gdx):
+        for dz in (120, 180):
+            for dx in (-12, 12):
+                for dy in (-15, 15):
+                    base.append((c0 + gx + dx, rl + dz + dy, 5.5, "M5 pattino SC16UU [V]"))
+    for a in range(4):
+        ang = math.radians(45 + 90 * a)
+        base.append((c0 + sdx + 19 * math.cos(ang), rl + 150 + 19 * math.sin(ang), 5.5, "M5 chiocciola TR16 [V]"))
+    base.append((c0 + sdx, rl + 150, 30, "passaggio vite TR16"))
+    base += [(c0 + 70, rl + 20, 6.6, "M6 barra raschietto")]
     plates.append(dict(code="ZSL-02", name="Slitta Z lato Y+ (Z2)", qty="1", t=P["slide_t"], w=sw, h=sh_, holes=list(base),
-                       material="AISI 304 sp. 12", note="Asse foro rullo // base slitta: 0,05. Raccordare spigoli R5."))
-    z1 = list(base) + nema(c0, 180, "Motore R")
-    z1 += [(c0 - 20, 120, 6.6, "M6 tendicinghia (asola)"), (c0 + 20, 120, 6.6, "M6 tendicinghia (asola)")]
+                       material="AISI 304 sp. 16", note="Sede cuscinetto alesata H7 dopo il taglio. Bandierina sensori 16×14 saldata sul lato destro in alto."))
+    z1 = list(base) + nema(c0, rl + 135, "Motore R")
     plates.append(dict(code="ZSL-01", name="Slitta Z lato Y− (Z1, con motore R)", qty="1", t=P["slide_t"], w=sw, h=sh_, holes=z1,
-                       material="AISI 304 sp. 12", note="Fori motore R asolati 6 mm in verticale per tensionamento cinghia."))
+                       material="AISI 304 sp. 16", note="Fori M5 motore R asolati 6 mm in verticale (tensione cinghia). Bandierina sensori come ZSL-02."))
+
+    # coperchio cuscinetto
+    h = [(36, 36, 22, "Ø22 passaggio perno")] + [(36 + 30 * math.cos(math.radians(45 + 90 * a)), 36 + 30 * math.sin(math.radians(45 + 90 * a)), 5.5, "M5 passante") for a in range(4)]
+    plates.append(dict(code="COP-01", name="Coperchio cuscinetto Ø72 (disegnato quadro 72, tornire Ø72)", qty="2", t=5, w=72, h=72, holes=h,
+                       material="AISI 304 sp. 5", note="Tornire il contorno Ø72 dopo il taglio; spallamento Ø47×1 che preme l'anello esterno del cuscinetto."))
 
     # piastra piede
     f = P["foot"]
@@ -261,10 +277,10 @@ def draw_plate(pdf, num, sp):
     rows_tab = [(r[0], r[1], r[2], r[3]) for r in rows]
     y = 270
     xt = 250
-    chunk = 30
-    table(sh, xt, y, ("Foro", "X", "Y", "Tipo"), rows_tab[:chunk], (12, 16, 16, 108), size=5, rh=4.6, title="TABELLA FORI")
+    chunk = 44
+    table(sh, xt, y, ("Foro", "X", "Y", "Tipo"), rows_tab[:chunk], (12, 16, 16, 108), size=4.8, rh=4.0, title="TABELLA FORI")
     if len(rows_tab) > chunk:
-        sh.t(xt, 270 - (chunk + 1) * 4.6 - 6, f"... altri {len(rows_tab) - chunk} fori: vedere DXF {sp['code']}.dxf", 5.5)
+        sh.t(xt, 270 - (chunk + 1) * 4.0 - 6, f"... altri {len(rows_tab) - chunk} fori: vedere DXF {sp['code']}.dxf", 5.5)
     sh.t(30, 52, "Note: " + sp["note"], 6)
     sh.t(30, 58, f"File di taglio: cad/dxf/{sp['code']}.dxf (contorno su layer TAGLIO, fori filettati su layer FORI_FILETTARE a diametro di preforo)", 5.5)
     sh.save(pdf)
@@ -359,32 +375,34 @@ def sheet_pin(pdf, num, P):
 def sheet_roller(pdf, num, P):
     D, Lr = P["roller_d"], P["roller_len"]
     zy = P["anchor_y"] - 90
-    stub = zy - Lr / 2 + 10
+    stub = (zy - 47 + 30) - Lr / 2          # perno lato Y− (puleggia 40T)
+    stub2 = (zy - 47 + 8) - Lr / 2          # perno lato Y+
     sh = Sheet(num, "RUL-01 Rullo di laminazione", scale="1:2", material="Tubo AISI 304 Ø100×3 + perni 304", qty="1", fornitura="Tornitore (rettifica)")
     s = 0.5
     v = View(sh, 40, 165, s)
     sh.t(40, 220, "RULLO — vista e sezione (scala 1:2)", 6.5, weight="bold")
-    tot = Lr + 2 * stub
+    tot = Lr + stub + stub2
     x0 = 0
     v.rect(stub, -D / 2, Lr, D)
     v.rect(stub, -D / 2 + 3, Lr, D - 6, lw=THIN, ls="--")
     v.rect(stub, -D / 2 + 3, 10, D - 6, lw=THIN, fc="#dddddd")
     v.rect(stub + Lr - 10, -D / 2 + 3, 10, D - 6, lw=THIN, fc="#dddddd")
     v.rect(0, -10, stub, 20)
-    v.rect(stub + Lr, -10, stub, 20)
+    v.rect(stub + Lr, -10, stub2, 20)
     v.axis_line(-10, 0, tot + 10, 0)
-    v.rect(stub - 45 - 0, 7, 30, 3, lw=THIN)
+    v.rect(4, 7, 22, 3, lw=THIN)
+    v.dim_h(stub + Lr, tot, -10, -12, text=f"{stub2:g}")
     v.dim_h(0, tot, D / 2, 12, text=f"{tot:g}")
     v.dim_h(stub, stub + Lr, D / 2, 5, text=f"{Lr:g} (tavola utile)")
     v.dim_h(0, stub, -10, -12, text=f"{stub:g}")
     v.dim_v(-D / 2, D / 2, stub + Lr, 10, text=f"Ø{D:g} h8")
     v.dim_v(-10, 10, 0, -8, text="Ø20 h6")
-    v.note(stub - 30, 10, v.ox + 20, v.oy + 50, "cava linguetta 6×6×30 (lato Z1, puleggia 40T)")
+    v.note(15, 10, v.ox + 20, v.oy + 50, "cava linguetta 6×6×22 (lato Y−, puleggia 40T) · sedi cuscinetto Ø20 k6 + gola seeger")
     v.note(stub + 5, D / 2 - 15, v.ox + 100, v.oy + 52, "testate sp. 10 saldate TIG a tenuta, passivate")
     sh.t(40, 95, "Superficie di lavoro: rettificata e lucidata Ra ≤ 0,8 µm, nessuna porosità; eccentricità 0,03; equilibratura statica.", 6.2)
     sh.t(40, 88, "Perni: tornire dopo saldatura testate, in un'unica presa tra le punte (coassialità perni/superficie 0,02).", 6.2)
     sh.t(40, 81, "Alternativa alimentare leggera: barra piena POM-C Ø100 con perni inox passanti incollati e spinati.", 6.2)
-    sh.t(40, 74, "Montaggio: supporti flangiati inox SUCF204 (Ø20) sulle slitte ZSL-01 / ZSL-02. Raschietto RAS-01 in POM-C a contatto con molla.", 6.2)
+    sh.t(40, 74, "Montaggio: cuscinetti inox S6204-2RS nelle sedi delle slitte ZSL-01/02, chiusi dai coperchi COP-01. Raschietto RAS-01 in POM-C.", 6.2)
     sh.save(pdf)
 
 
@@ -475,6 +493,8 @@ def sheet_shaft_misc(pdf, num, P):
 # ------------------------------------------------------------------ assieme (proiezione modello)
 def project(prim, view):
     """Ritorna (patch_type, params, depth) per vista: 'top' (X,Y, profondità -Z), 'front' (X,Z, prof. Y), 'side' (Y,Z, prof. -X)."""
+    if prim["t"] == "tube":
+        return None
     c = prim["c"]
     if view == "top":
         u, w, d, ia, ib, axn = c[0], c[1], -c[2], 0, 1, "z"
@@ -515,7 +535,9 @@ def sheet_assembly(pdf, num, P, mdl):
             for q in p["prims"]:
                 if p["code"] == "TAV" and q["c"][2] < -60:
                     continue
-                items.append((p, q, project(q, view)))
+                pr = project(q, view)
+                if pr:
+                    items.append((p, q, pr))
         items.sort(key=lambda it: -it[2][2])
         for p, q, (kind, prm, dep) in items:
             col = q["col"]
@@ -539,7 +561,7 @@ def sheet_assembly(pdf, num, P, mdl):
         else:
             vw.dim_h(-P["anchor_y"], P["anchor_y"], 0, -6, text=f"{2 * P['anchor_y']}")
             vw.dim_v(0, P["gap_ref"], 0, 6, text=f"luce {P['gap_ref']}")
-    rows = [(p["code"], p["name"][:52], p["info"].get("Fornitura", "")[:30]) for p in mdl.parts if p["code"] not in ("TAV", "IMP")]
+    rows = [(p["code"], p["name"][:52], p["info"].get("Fornitura", "")[:30]) for p in mdl.parts if p["code"] not in ("TAV", "IMP") and not p["code"].startswith("QE-") or p["code"] == "QE-01"]
     seen, uniq = set(), []
     for r in rows:
         if r[0] not in seen:
@@ -563,10 +585,10 @@ def sheet_cover(pdf, P):
             sh.t(20 + i * 160, 238 - 0, lab, 7, weight="bold")
     idx = [("00", "Copertina e indice"), ("01", "Assieme generale — viste"), ("02", "TEL-01 Telaio portale"),
            ("03", "ANC Ancoraggi fissi"), ("04", "PER-01 Perno di centraggio"), ("05", "RUL-01 Rullo"),
-           ("06-11", "Piastre laser: CAR-01, ZPL-01, ZSL-02, ZSL-01, PIE-01, STM-01"), ("12", "Particolari torniti e plastici")]
+           ("06-12", "Piastre laser: CAR-01, ZPL-01, ZSL-02, ZSL-01, COP-01, PIE-01, STM-01"), ("13", "Particolari torniti e plastici")]
     table(sh, 20, 112 - 0, ("Tav.", "Contenuto"), idx, (18, 120), title="INDICE")
     sh.t(170, 100, "Elettrico: wiring/out/schemi_elettrici.pdf  ·  Distinta: bom/ManipMasta_distinta.xlsx", 6.5)
-    sh.t(170, 92, "Modello 3D interattivo: cad/build/manipmasta_3d.html  ·  OpenSCAD: cad/manipmasta.scad", 6.5)
+    sh.t(170, 92, "Modello 3D (esploso, come funziona, montaggio): cad/build/manipmasta_3d.html  ·  Istruzioni: cad/drawings/ManipMasta_montaggio.pdf", 6.5)
     sh.save(pdf)
 
 
@@ -585,7 +607,7 @@ def main():
         for i, sp in enumerate(plates):
             draw_plate(pdf, f"{6 + i:02d}", sp)
             write_dxf(sp)
-        sheet_shaft_misc(pdf, "12", P)
+        sheet_shaft_misc(pdf, f"{6 + len(plates):02d}", P)
     print("ok", len(plates), "piastre")
 
 

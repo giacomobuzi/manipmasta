@@ -10,11 +10,11 @@
 | File | Descrizione |
 |---|---|
 | `generate_wiring.py` | genera tutte le tavole (solo matplotlib). `python3 generate_wiring.py` ; con `--md` stampa le tabelle di questo README |
-| `out/E01.svg/.png` | **E01 Potenza** — 230 V, Q1, Q2, F1–F3, KM1, PSU1/2/3, fusibili driver F11–F14, distribuzione 48 V/24 V, barra PE |
-| `out/E02.svg/.png` | **E02 Sicurezza** — fungo S0 2NC, reset S1, relè di sicurezza K1, KM1 con retroazione, barriera LC1 → K2/K3 → D3 |
-| `out/E03.svg/.png` | **E03 Arduino e driver** — 4 × CL57T: PUL/DIR/ENA/ALM, alimentazione 48 V, fasi motore ed encoder via XP1 |
+| `out/E01.svg/.png` | **E01 Potenza** — 230 V, Q1, Q2, F1–F3, KM1 + KM2 in serie, PSU1/2/3, fusibili driver F11–F14, distribuzione 48 V/24 V, barra PE |
+| `out/E02.svg/.png` | **E02 Sicurezza** — fungo S0 2NC, reset S1, relè di sicurezza K1, KM1 + KM2 (bobine sui due canali, NC 21-22 in serie nel reset), barriera LC1 → K2/K3 → D3 |
+| `out/E03.svg/.png` | **E03 Arduino e driver** — 4 × CL57T: PUL/DIR/ENA/ALM, pull-up R1–R4 680 Ω su ENA+, alimentazione 48 V, fasi motore ed encoder via XP1 |
 | `out/E04.svg/.png` | **E04 Ingressi/uscite** — sensori B1–B8 via XP2 → U6, pulsanti e sicurezze → U7, D5–D8 → U8 → colonna luminosa |
-| `out/E05.svg/.png` | **E05 Disposizione quadro** — piastra, parete laterale, fondo con connettori Harting, porta, collegamento al portale |
+| `out/E05.svg/.png` | **E05 Disposizione quadro** — cassetta 500×400×250: piastra di fondo (1:2), parete dx con logica/I/O, parete sx con ventilazione, fondo con Harting e pressacavi, porta, collegamento al portale |
 | `out/schemi_elettrici.pdf` | le 5 tavole in un PDF A3 orizzontale |
 | `out/elenco_fili.csv` | elenco fili (stesso contenuto della tabella sotto, separatore `;`) |
 
@@ -27,15 +27,16 @@
 | Q2 | differenziale 2P 25 A, Id 30 mA tipo A (facoltativo se già presente a quadro di laboratorio dedicato) |
 | X1 | distribuzione 230 V (X1:1–3 L, X1:4–6 N) |
 | F1 / F2 / F3 | fusibili 10×38 gG su L: PSU1 6,3 A, PSU2 2 A, PSU3 1 A (taratura da confermare con lo spunto delle PSU) |
-| KM1 | contattore AC-3 ≥ 9 A, bobina 24 V DC con soppressore, contatto ausiliario NC 21-22 |
+| KM1, KM2 | contattori AC-3 ≥ 9 A in serie su L e N di PSU1, bobina 24 V DC con soppressore (KM1 da K1 13-14, KM2 da K1 23-24), contatto ausiliario NC 21-22 (a guida forzata / specchio) in serie nel reset S33-S34 |
 | PSU1 | Mean Well SDR-480-48 — 48 V 10 A, solo driver |
 | PSU2 | Mean Well HDR-60-24 — 24 V 2,5 A (sicurezza, sensori, relè, colonna) |
 | PSU3 | Mean Well HDR-15-12 — 12 V, Vin Arduino |
 | F4 / F5 | fusibili 5×20 2 A T su +24 V: F4 circuito di sicurezza (X3:1–4), F5 I/O (X3:5–13) |
 | F11–F14 | fusibili 5×20 **5 A T** sul +48 V, uno per driver |
 | X2 | distribuzione 48 V (X2:1–4 +48 V, X2:5–9 0V48) |
-| X3 / X4 | +24 V (X3:1–4 sicurezza, X3:5–13 I/O) / 0V24 (X4:1–12) |
-| X6 / X7 | GND logica 5 V (X6:1–8) / +5 V logica da Arduino (X7:1–4) |
+| X3 / X4 | +24 V (X3:1–4 sicurezza, X3:5–13 I/O) / 0V24 (X4:1–13) |
+| X6 / X7 | GND logica 5 V (X6:1–8) / +5 V logica da Arduino (X7:1–8; X7:5–8 pull-up ENA) |
+| R1–R4 | resistenze di pull-up 680 Ω 0,25 W da ENA+ di U11–U14 verso +5 V (driver disabilitati con MCU in reset) |
 | K1 | modulo relè di sicurezza 2 canali, cat. 3 / PL d, reset manuale controllato (es. PNOZ X2.8P, SRB 301MC o equivalente) |
 | K2, K3 | relè di interfaccia 24 V DC, 1 contatto NO (OSSD1, OSSD2 della barriera) |
 | S0 | fungo di emergenza a ritenuta 2NC (porta) |
@@ -95,7 +96,7 @@ driver e collegati alla GND logica (X6). ALM+ → pin Arduino con INPUT_PULLUP.
 
 | Circuito | Sezione | Cavo / colore |
 |---|---|---|
-| 230 V AC (rete, Q1, Q2, F1–F3, KM1, PSU) | 1,5 mm² | H07V-K: L marrone (o nero), N blu chiaro |
+| 230 V AC (rete, Q1, Q2, F1–F3, KM1, KM2, PSU) | 1,5 mm² | H07V-K: L marrone (o nero), N blu chiaro |
 | PE | 2,5 mm² (1,5 per PSU1 FG e ponti PELV, 6 mm² treccia porta) | giallo-verde |
 | 48 V DC PSU1 → X2 | 2,5 mm² | + rosso, 0 V nero |
 | 48 V DC X2 → F11–F14 → driver | 1,5 mm² | + rosso, 0 V nero |
@@ -216,12 +217,14 @@ Numerazione: 1–17 230 V · PEx terra · 2xx 48 V · 3xx 24 V e sicurezza · 4x
 | 9 | X1:3 | F3:1 | L PSU3 | 1,5 | marrone |  |
 | 10 | F1:2 | KM1:1 | L PSU1 | 1,5 | marrone |  |
 | 11 | X1:4 | KM1:3 | N PSU1 | 1,5 | blu chiaro |  |
-| 12 | KM1:2 | PSU1:L | L PSU1 sotto sicurezza | 1,5 | marrone |  |
-| 13 | KM1:4 | PSU1:N | N PSU1 sotto sicurezza | 1,5 | blu chiaro |  |
+| 12 | KM1:2 | KM2:1 | L PSU1 serie KM1-KM2 | 1,5 | marrone |  |
+| 13 | KM1:4 | KM2:3 | N PSU1 serie KM1-KM2 | 1,5 | blu chiaro |  |
 | 14 | F2:2 | PSU2:L | L PSU2 | 1,5 | marrone |  |
 | 15 | X1:5 | PSU2:N | N PSU2 | 1,5 | blu chiaro |  |
 | 16 | F3:2 | PSU3:L | L PSU3 | 1,5 | marrone |  |
 | 17 | X1:6 | PSU3:N | N PSU3 | 1,5 | blu chiaro |  |
+| 18 | KM2:2 | PSU1:L | L PSU1 sotto sicurezza | 1,5 | marrone |  |
+| 19 | KM2:4 | PSU1:N | N PSU1 sotto sicurezza | 1,5 | blu chiaro |  |
 | PE1 | X0:PE | BPE | PE rete | 2,5 | giallo-verde |  |
 | PE2 | BPE | PSU1:FG | PE | 1,5 | giallo-verde | PSU2/PSU3 HDR in classe II: senza FG |
 | PE3 | BPE | piastra di fondo | PE | 2,5 | giallo-verde |  |
@@ -247,7 +250,7 @@ Numerazione: 1–17 230 V · PEx terra · 2xx 48 V · 3xx 24 V e sicurezza · 4x
 | 214 | X2:9 | U14:GND | 0V48 driver R | 1,5 | nero |  |
 | 301 | PSU2:+V | F4:1 | +24 V | 1,0 | blu scuro |  |
 | 302 | PSU2:+V | F5:1 | +24 V | 1,0 | blu scuro |  |
-| 303 | PSU2:-V | X4:1 | 0V24 | 1,0 | blu/bianco | ponticello X4:1-12 |
+| 303 | PSU2:-V | X4:1 | 0V24 | 1,0 | blu/bianco | ponticello X4:1-13 |
 | 304 | F4:2 | X3:1 | +24 V S (sicurezza) | 1,0 | blu scuro | ponticello X3:1-4 |
 | 305 | F5:2 | X3:5 | +24 V I/O | 1,0 | blu scuro | ponticello X3:5-13 |
 | 310 | X3:2 | K1:A1 | +24 V S alim. K1 | 0,75 | blu scuro |  |
@@ -258,13 +261,16 @@ Numerazione: 1–17 230 V · PEx terra · 2xx 48 V · 3xx 24 V e sicurezza · 4x
 | 315 | S0:22 | K1:S22 | emergenza canale 2 | 0,5 | blu scuro |  |
 | 316 | K1:S33 | S1:13 | reset | 0,5 | blu scuro |  |
 | 317 | S1:14 | KM1:21 | reset + retroazione | 0,5 | blu scuro |  |
-| 318 | KM1:22 | K1:S34 | retroazione KM1 (NC) | 0,5 | blu scuro |  |
-| 319 | X3:3 | K1:13 | +24 V S | 0,75 | blu scuro |  |
-| 320 | K1:14 | K1:23 | serie contatti sicuri | 0,75 | blu scuro |  |
-| 321 | K1:24 | KM1:A1 | comando bobina KM1 | 0,75 | blu scuro | soppressore su bobina |
-| 322 | KM1:A2 | X4:3 | 0V24 | 0,75 | blu/bianco |  |
-| 323 | X3:4 | K1:43 | +24 V S | 0,5 | blu scuro |  |
-| 324 | K1:44 | U7:IN1 | ESTOP_OK (24 V = OK) | 0,5 | blu scuro | -> D2 |
+| 318 | KM1:22 | KM2:21 | retroazione KM1-KM2 (NC in serie) | 0,5 | blu scuro |  |
+| 319 | KM2:22 | K1:S34 | retroazione KM2 (NC) | 0,5 | blu scuro |  |
+| 320 | X3:3 | K1:13 | +24 V S | 0,75 | blu scuro |  |
+| 321 | K1:13 | K1:23 | +24 V S ai 2 canali di uscita | 0,75 | blu scuro | ponticello sul modulo K1 |
+| 322 | K1:14 | KM1:A1 | comando bobina KM1 (canale 1) | 0,75 | blu scuro | soppressore su bobina |
+| 323 | KM1:A2 | X4:3 | 0V24 | 0,75 | blu/bianco |  |
+| 324 | K1:24 | KM2:A1 | comando bobina KM2 (canale 2) | 0,75 | blu scuro | soppressore su bobina |
+| 325 | KM2:A2 | X4:13 | 0V24 | 0,75 | blu/bianco |  |
+| 326 | X3:4 | K1:43 | +24 V S | 0,5 | blu scuro |  |
+| 327 | K1:44 | U7:IN1 | ESTOP_OK (24 V = OK) | 0,5 | blu scuro | -> D2 |
 | 330 | X3:6 | LC1-TX:+24 | +24 V emettitore | 0,5 | blu scuro | via W20 |
 | 331 | X4:4 | LC1-TX:0V | 0V24 | 0,5 | blu/bianco | via W20 |
 | 332 | X3:7 | LC1-RX:+24 | +24 V ricevitore | 0,5 | blu scuro | via W21 |
@@ -302,28 +308,32 @@ Numerazione: 1–17 230 V · PEx terra · 2xx 48 V · 3xx 24 V e sicurezza · 4x
 | 381 | X4:12 | U9:-Vin | 0V24 DC/DC | 0,5 | blu/bianco |  |
 | 382 | U9:+Vout | U8:JD-VCC | +5 V bobine rele | 0,5 | rosso | togliere ponticello JD-VCC/VCC |
 | 383 | U9:-Vout | U8:GND(JD) | 0 V bobine rele | 0,5 | nero |  |
-| 400 | A1:5V | X7:1 | +5 V logica | 0,5 | rosso | ponticello X7:1-4 |
+| 400 | A1:5V | X7:1 | +5 V logica | 0,5 | rosso | ponticello X7:1-8 |
 | 401 | A1:GND | X6:1 | GND logica | 0,5 | nero | ponticello X6:1-8 |
 | 411 | A1:D22 | U11:PUL+ | X_PUL | 0,5 | viola |  |
 | 412 | A1:D23 | U11:DIR+ | X_DIR | 0,5 | viola |  |
 | 413 | A1:D24 | U11:ENA+ | X_ENA (ALTO=disabilitato) | 0,5 | viola |  |
 | 414 | U11:ALM+ | A1:D25 | X_ALM (BASSO=allarme) | 0,5 | grigio | INPUT_PULLUP |
 | 415 | X6:2 | U11:PUL- | GND logica X | 0,5 | nero | ponticelli PUL-/DIR-/ENA-/ALM- sul driver |
+| 416 | X7:5 | R1:1 | +5 V pull-up X_ENA | 0,5 | rosso | R1 680 Ohm 0,25 W, R1:2 su U11:ENA+ (puntale doppio con filo 413) |
 | 421 | A1:D26 | U12:PUL+ | Z1_PUL | 0,5 | viola |  |
 | 422 | A1:D27 | U12:DIR+ | Z1_DIR | 0,5 | viola |  |
 | 423 | A1:D28 | U12:ENA+ | Z1_ENA (ALTO=disabilitato) | 0,5 | viola |  |
 | 424 | U12:ALM+ | A1:D29 | Z1_ALM (BASSO=allarme) | 0,5 | grigio | INPUT_PULLUP |
 | 425 | X6:3 | U12:PUL- | GND logica Z1 | 0,5 | nero | ponticelli PUL-/DIR-/ENA-/ALM- sul driver |
+| 426 | X7:6 | R2:1 | +5 V pull-up Z1_ENA | 0,5 | rosso | R2 680 Ohm 0,25 W, R2:2 su U12:ENA+ (puntale doppio con filo 423) |
 | 431 | A1:D30 | U13:PUL+ | Z2_PUL | 0,5 | viola |  |
 | 432 | A1:D31 | U13:DIR+ | Z2_DIR | 0,5 | viola |  |
 | 433 | A1:D32 | U13:ENA+ | Z2_ENA (ALTO=disabilitato) | 0,5 | viola |  |
 | 434 | U13:ALM+ | A1:D33 | Z2_ALM (BASSO=allarme) | 0,5 | grigio | INPUT_PULLUP |
 | 435 | X6:4 | U13:PUL- | GND logica Z2 | 0,5 | nero | ponticelli PUL-/DIR-/ENA-/ALM- sul driver |
+| 436 | X7:7 | R3:1 | +5 V pull-up Z2_ENA | 0,5 | rosso | R3 680 Ohm 0,25 W, R3:2 su U13:ENA+ (puntale doppio con filo 433) |
 | 441 | A1:D34 | U14:PUL+ | R_PUL | 0,5 | viola |  |
 | 442 | A1:D35 | U14:DIR+ | R_DIR | 0,5 | viola |  |
 | 443 | A1:D36 | U14:ENA+ | R_ENA (ALTO=disabilitato) | 0,5 | viola |  |
 | 444 | U14:ALM+ | A1:D37 | R_ALM (BASSO=allarme) | 0,5 | grigio | INPUT_PULLUP |
 | 445 | X6:5 | U14:PUL- | GND logica R | 0,5 | nero | ponticelli PUL-/DIR-/ENA-/ALM- sul driver |
+| 446 | X7:8 | R4:1 | +5 V pull-up R_ENA | 0,5 | rosso | R4 680 Ohm 0,25 W, R4:2 su U14:ENA+ (puntale doppio con filo 443) |
 | 501 | U6:OUT1 | A1:D38 | X_MIN | 0,5 | grigio | BASSO = attivo |
 | 502 | U6:OUT2 | A1:D39 | X_MAX | 0,5 | grigio | BASSO = attivo |
 | 503 | U6:OUT3 | A1:D40 | Z1_HOME | 0,5 | grigio | BASSO = attivo |
@@ -407,7 +417,7 @@ Numerazione: 1–17 230 V · PEx terra · 2xx 48 V · 3xx 24 V e sicurezza · 4x
    affiancato), lunghezza minima.
 6. **PE**: un solo punto di collegamento 0V48–PE (X2:5) e 0V24–PE (X4:1); ponti rimovibili per la prova
    di isolamento. GND logica Arduino non collegata a PE (separata dagli optoisolatori).
-7. Bobina KM1 con soppressore (diodo o varistore); relè K2/K3 con LED/diodo integrato.
+7. Bobine KM1 e KM2 con soppressore (diodo o varistore); relè K2/K3 con LED/diodo integrato.
 
 ## Impostazioni driver CL57T (DIP / microstep)
 
@@ -436,18 +446,19 @@ misuratore di isolamento. Annotare gli esiti.
 2. **Continuità PE** (< 0,1 Ω tipico, metodo CEI EN 60204-1 §18.2): BPE ↔ X0:PE, piastra, porta, PSU1 FG,
    XP1 PE ↔ telaio portale (con XP1 chiuso), carcasse motori, XP2 PE.
 3. **Isolamento** (CEI EN 60204-1 §18.3): 500 V DC tra L+N uniti e PE con Q1 chiuso, PSU **scollegate**
-   (o morsetti di ingresso PSU aperti) e KM1 forzato chiuso solo per la misura → ≥ 1 MΩ. Circuiti PELV:
+   (o morsetti di ingresso PSU aperti) e KM1/KM2 forzati chiusi solo per la misura → ≥ 1 MΩ. Circuiti PELV:
    aprire i ponti PE7 e PE8 e misurare a tensione ridotta (es. 250 V) solo se i componenti elettronici
    sono scollegati; poi **richiudere i ponti**.
 4. **Assenza di corti**: tra +48 V e 0V48 a valle di ogni F1x, tra +24 V e 0V24, tra +5 V e GND logica.
 5. **Prima alimentazione senza carichi**: driver, Arduino, U6/U7/U8 scollegati o fusibili F11–F14 e F4/F5
    tolti. Q1+Q2 ON: verificare 230 V a PSU2/PSU3, 24,0 V tra X3 e X4, 12 V al jack Arduino.
-   **PSU1 deve restare spenta** (KM1 aperto).
+   **PSU1 deve restare spenta** (KM1 e KM2 aperti).
 6. **Polarità**: con multimetro su ogni alimentazione prima di collegare i carichi (+48 V sul +Vdc di
    ogni driver, +24 V su BN dei sensori, +12 V centrale positivo sul jack Arduino).
-7. **Catena di sicurezza**: inserire F4. S0 rilasciato → premere S1 → KM1 si chiude, PSU1 accesa,
-   48 V ai driver. Premere S0 → KM1 apre. Con KM1 forzato meccanicamente (o simulando il contatto
-   21-22 aperto) il reset non deve essere possibile. Provare entrambi i canali (staccare un filo per
+7. **Catena di sicurezza**: inserire F4. S0 rilasciato → premere S1 → KM1 e KM2 si chiudono, PSU1 accesa,
+   48 V ai driver. Premere S0 → KM1 e KM2 aprono. Con KM1 **oppure** KM2 forzato meccanicamente (o
+   simulando il rispettivo contatto 21-22 aperto) il reset non deve essere possibile; con uno solo dei
+   due forzato chiuso, premendo S0 PSU1 deve comunque spegnersi. Provare entrambi i canali (staccare un filo per
    volta: 312 e 314) → K1 non deve riarmarsi.
 8. **Test ingressi uno a uno** con firmware caricato, collegati via USB-Serial 115200 o MQTT, comando
    **`STATUS`** dopo ogni azione:
@@ -468,18 +479,24 @@ misuratore di isolamento. Annotare gli esiti.
 ## Note di progetto e punti aperti
 
 - **Barriera LC1**: come da SPEC agisce solo tramite firmware (D3). Per una vera funzione di sicurezza le
-  OSSD devono agire sul circuito di potenza (secondo modulo di sicurezza o K1 con ingressi OSSD → KM1).
-- **Categoria 3 con un solo contattore**: per PL d serve ridondanza in uscita (KM1 + KM2 in serie, contatti
-  a specchio in serie nel loop di retroazione S33–S34).
-- **ENA all'accensione**: i pin Arduino sono in alta impedenza durante il reset/boot → ENA non pilotato →
-  CL57T **abilitato** finché il firmware non porta ENA ALTO. Il rischio è limitato perché senza impulsi il
-  motore non si muove e KM1 richiede comunque il reset manuale, ma valutare una resistenza di pull-up
-  (es. 1 kΩ verso +5 V su ENA+) se si vuole il driver disabilitato a MCU ferma.
+  OSSD devono agire sul circuito di potenza (secondo modulo di sicurezza o K1 con ingressi OSSD → KM1/KM2).
+- **Ridondanza in uscita (cat. 3)**: KM1 + KM2 con contatti di potenza in serie su L e N di PSU1, bobine
+  pilotate dai due canali di K1 (13-14 → KM1, 23-24 → KM2), NC 21-22 di KM1 e KM2 in serie nel loop di
+  retroazione S33–S34 (fili 317–319). Usare contattori con contatti ausiliari a specchio (EN 60947-4-1
+  allegato F). Verificare sul manuale di K1 che i due canali di uscita possano pilotare carichi separati.
+- **ENA all'accensione**: i pin Arduino sono in alta impedenza durante il reset/boot → senza pull-up il
+  CL57T sarebbe **abilitato** finché il firmware non porta ENA ALTO. Previste R1–R4 **680 Ω** da ENA+ a
+  +5 V (X7:5–8, fili 416/426/436/446) come da SPEC §2.1: ~7 mA nell'opto ENA (driver disabilitato a MCU
+  ferma); con il pin in uscita BASSA l'Arduino assorbe ~7 mA per pin, accettabile. **Verificare la corrente
+  minima d'ingresso ENA sul manuale del driver.**
 - **Corrente uscite Arduino**: 12 ingressi opto dei driver da ~7–15 mA; pin 22–33 (PORTA + PC4–PC7) nello
   stesso gruppo di alimentazione del Mega (limite 100 mA): non portare ENA ALTO e impulsi a corrente piena
   su tutti i canali contemporaneamente, o usare un buffer (es. 74HCT244/ULN) se i driver assorbono di più.
 - **Modulo relè U8**: 4 bobine 5 V (~70 mA cad.) dal regolatore dell'Arduino alimentato a 12 V lo
   surriscaldano → bobine da U9 (DC/DC 24→5 V) con ponticello JD-VCC rimosso, oppure modulo relè con
   bobine a 24 V. Il modulo deve essere a **trigger ALTO** (molti moduli economici sono a trigger basso).
-- **Cassetta 400×300×200**: occupazione stimata ~95 % e dissipazione interna 40–70 W (PSU1 + driver):
-  valutare 500×400×250 o ventilazione filtrata IP54 compatibile con la pulizia del laboratorio.
+- **Cassetta 500×400×250** (SPEC §2): disposizione in E05 coerente con il layout 3D. Dissipazione interna
+  40–70 W (PSU1 + driver): ventola 120 mm filtrata IP54 in ingresso in alto sulla parete sx, griglia di
+  uscita filtrata in basso. Canaline 25×40 (larghezza vista × profondità): orizzontali v 362–387, 222–247,
+  20–45; verticali larghe 18 a u ±230…248. Fila alta su DIN v=307 (moduli v 262–352). K2/K3 (relè interfaccia barriera)
+  non sono nel layout 3D: proposti sulla guida DIN della fila bassa a u 150–165.

@@ -39,8 +39,8 @@ Tutte le quote sono parametriche (`cad/params.json`): con le misure reali si rig
   - driver 800 impulsi/giro, passo 4 mm → **200 step/mm**.
   - Homing in ALTO (sicuro), ognuno sul proprio finecorsa → auto-livellamento del rullo.
   - Quota Z espressa come **gap = luce tra rullo e piano** (0…150 mm). Calibrazione: `z_home_gap` in EEPROM.
-- **Rullo (cilindro)**: tubo AISI 304 Ø100×3, tavola utile 370 mm (con tavolo da 900 mm di profondità si arriva a ~470), testate saldate e perni Ø20,
-  rettificato e lucidato Ra ≤ 0,8 µm (alternativa: POM‑C alimentare pieno Ø100). Supporti: 2 unità flangiate quadre inox SUCF204 (4 fori, interasse 64).
+- **Rullo (cilindro)**: tubo AISI 304 Ø100×3, tavola utile 360 mm (con tavolo da 900 mm di profondità si arriva a ~460), testate saldate e perni Ø20,
+  rettificato e lucidato Ra ≤ 0,8 µm (alternativa: POM‑C alimentare pieno Ø100). Supporti: 2 cuscinetti inox S6204-2RS nelle sedi Ø47 H7 delle slitte Z, chiusi da coperchi COP-01.
   Raschietto in POM‑C a molla sul lato superiore.
 - **Asse R (rotazione rullo motorizzata)**: motore su piastra Z1, cinghia HTD‑5M 15, pulegge 20T (motore) → 40T (rullo), rapporto 2:1.
   Sviluppo superficie per giro motore = π·100/2 = 157,08 mm; driver 800 impulsi/giro → **5,093 step/mm di superficie**.
@@ -97,7 +97,7 @@ Riservati shield Ethernet: D4 (SD CS, tenere ALTO), D10 (W5500 CS), D50–D53 (S
 
 Driver CL57T: ingressi optoisolati 5 V a catodo comune: PUL+ ← pin, PUL− → GND (idem DIR, ENA).
 ENA: pin ALTO = driver **disabilitato** (logica CL57T: opto attivo = disable). Il firmware definisce `ENA_ACTIVE_LEVEL` in `config.h`.
-All'accensione/reset i pin sono flottanti: resistenza di pull-up 4,7 kΩ verso 5 V su ogni ENA+ così i driver partono disabilitati.
+All'accensione/reset i pin sono flottanti: resistenza di pull-up 680 Ω verso 5 V su ogni ENA+ (~7 mA nell'opto; con pin BASSO l'Arduino assorbe ~7 mA per pin) così i driver partono disabilitati — verificare corrente minima ingresso ENA sul manuale del driver.
 I pin 22–37 condividono un gruppo di porte del Mega (limite 100 mA): con driver ad alto assorbimento d'ingresso usare un buffer 74HCT245/ULN.
 ALM+: → pin Arduino (pull-up), ALM− → GND.
 
@@ -196,3 +196,12 @@ via polling WebSocket in foreground. Build APK automatica su GitHub Actions.
 - Ciclo RUN: la passata doppia k va avanti al gap G_k; fuori dall'impasto si applica `max(g1, G_k − dg)` e si torna indietro.
 - I gap di sicurezza (`g0+20`, `g1+30`) sono limitati a `min(g_max, z_home_gap)`.
 - PubSubClient pubblica a QoS 0; con broker irraggiungibile durante un movimento una publish può bloccare il loop fino a ~150 ms (documentato in firmware/README.md).
+
+## 8. Geometria di dettaglio (modello 3D, cad/model.py)
+
+- Carrello X: piastra 290×220×12 (da Y=180 a Y=400), squadra 60×60×6 verso la piastra Z, fori Ø17 per inserire gli alberi Z dall'alto.
+- Modulo Z (per lato): piastra Z 290×393×15 (Z 130–523), 2 alberi Ø16 su SK16 a X=±115, vite TR16×4 a X=−65 con BK12 (alto) e BF12 (basso);
+  slitta 300×250×16 con 4 pattini SC16UU (a +120 e +180 mm dall'asse rullo), chiocciola a +150, sede cuscinetto all'asse rullo (40 mm dal bordo inferiore).
+- Motore Z sopra il carrello su 4 distanziali da 40 mm con giunto 8→12; motore R sulla slitta Y− (lato interno) a +135 mm dall'asse rullo, cinghia tra slitta e piastra Z.
+- Sensori Z HOME/LOW sulla piastra Z, leggono una bandierina saldata sulla slitta. Finecorsa X sotto il carrello Y−, a X=±845.
+- Quadro 500×400×250 appeso al traverso X− (fuori dal tavolo, Z 100–500); connettori Harting sul fondo; fascio cavi verso la catena portacavi (canalina sul fianco Y−, estremità fissa a X=0).

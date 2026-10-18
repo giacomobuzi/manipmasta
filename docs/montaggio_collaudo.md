@@ -1,5 +1,7 @@
 # Montaggio, messa in servizio e uso
 
+La sequenza illustrata fase per fase (15 fasi, con viteria e coppie) è in `cad/drawings/ManipMasta_montaggio.pdf` e nella scheda *Montaggio* del modello 3D. Qui sotto la sintesi e la messa in servizio.
+
 ## 1. Ancoraggi
 1. Tracciare i centri (±930, ±340) dal centro del piano (o i valori rigenerati da `cad/params.json`).
 2. Forare il piano per le 4 viti M8 di ogni ancoraggio, contropiastra CTP-01 sotto. Non serrare a fondo.
@@ -11,7 +13,7 @@
 2. Carrelli con pattini, traversa ponte PON-01: il ponte deve scorrere a mano senza punti duri.
 3. Albero di sincronismo con pulegge, cinghie aperte bloccate ai carrelli: tensionare uguale sui due lati (stessa freccia).
 4. Moduli Z: piastre Z, alberi Ø16 su SK16, slitte con SC16UU, viti TR16 con BK12/BF12, motori Z su distanziali.
-5. Rullo nei supporti SUCF204, puleggia 40T, motore R e cinghia chiusa; tensionare con le asole della slitta Z1.
+5. Rullo con cuscinetti S6204 nelle slitte (coperchi COP-01), puleggia 40T, motore R e cinghia chiusa; tensionare con le asole della slitta Z1.
 6. Raschietto in appoggio leggero sul rullo.
 
 ## 3. Elettrica

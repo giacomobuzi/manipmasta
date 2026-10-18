@@ -10,6 +10,16 @@ Comando: **Arduino Mega 2560 + Ethernet**, gestione da **VM Linux** (Proxmox) co
 
 > Le quote sono calcolate su un tavolo ipotetico 2000 × 800 × 900. Inserire le misure reali in `cad/params.json` e rigenerare.
 
+## Modello 3D interattivo
+
+`cad/build/manipmasta_3d.html` (si apre nel browser) ha tre schede:
+- **Esplora**: esploso, posizione del rullo, luce rullo–piano, simulazione del ciclo, scheda di ogni pezzo;
+- **Come funziona**: dove sono i 4 motori, il motore closed-loop, assi X / Z / R animati, interno del quadro inox con sportello apribile;
+- **Montaggio**: le 15 fasi, con i pezzi che entrano in posizione, viteria, coppie e controlli.
+
+![Quadro](docs/img/funziona_quadro.png)
+![Motori](docs/img/funziona_motori.png)
+
 ## Come funziona
 
 | Asse | Cosa fa | Motore | Trasmissione |
@@ -32,6 +42,7 @@ fuori dall'impasto scende di 3 mm → … fino allo spessore finale → passate 
 | [`firmware/`](firmware/) | firmware Arduino Mega (Arduino IDE / PlatformIO) + test automatici su PC |
 | [`server/`](server/) | VM Linux: FastAPI + Mosquitto in Docker, interfaccia web, simulatore della macchina |
 | [`android/`](android/) | app Android (Kotlin); l'APK viene compilato da GitHub Actions |
+| [`cad/drawings/ManipMasta_montaggio.pdf`](cad/drawings/ManipMasta_montaggio.pdf) | **istruzioni di montaggio** in 15 fasi (immagini esplose, viteria, coppie, controlli) + come funzionano motori e quadro |
 | [`docs/`](docs/) | [lavorazioni per artigiani](docs/lavorazioni_artigiani.md), [montaggio e collaudo](docs/montaggio_collaudo.md), [sicurezza](docs/sicurezza.md) |
 
 ## Architettura di controllo
